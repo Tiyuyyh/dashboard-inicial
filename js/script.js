@@ -67,6 +67,12 @@ const translations = {
     }
 };
 
+// Substitua o termo fixo por este que busca na tradução:
+const termoResponsabilidade = 
+    (currentLang === 'pt-BR') ? "📜 TERMO DE USO E RESPONSABILIDADE\n\n1. Todo conteúdo é de sua responsabilidade.\n2. Sem links ilegais ou maliciosos.\n3. Você isenta o desenvolvedor de responsabilidade.\n\nAceita os termos?" :
+    (currentLang === 'es') ? "📜 TÉRMINO DE USO Y RESPONSABILIDAD\n\n1. Todo el contenido es tu responsabilidad.\n2. Sin enlaces ilegales o maliciosos.\n3. Eximes al desarrollador de responsabilidad.\n\n¿Aceptas los términos?" :
+    "📜 TERMS OF USE AND RESPONSIBILITY\n\n1. All content is your sole responsibility.\n2. No illegal or malicious links allowed.\n3. You hold the developer harmless from any liability.\n\nDo you accept these terms?";
+
 let pages = JSON.parse(localStorage.getItem('customTabs')) || [];
 let globalAutoOpen = JSON.parse(localStorage.getItem('globalAutoOpen')) ?? false;
 let currentLang = localStorage.getItem('preferredLang');
