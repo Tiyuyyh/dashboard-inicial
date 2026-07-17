@@ -19,7 +19,8 @@ const translations = {
         backupWarning: '🚨 SEGURO MORREU DE VELHO: Baixe seu backup! Esse arquivo é de sua total responsabilidade. Nós não temos acesso a nada. Se você perder o arquivo e limpar o navegador... já era, meu consagrado! Nem o TI da Nasa recupera.',
         confirmDelete: 'Você tem certeza absoluta que deseja remover o link para <strong>{name}</strong>?',
         btnYes: 'SIM 👍',
-        btnNo: 'NÃO 🛑'
+        btnNo: 'NÃO 🛑',
+        termosResp: "📜 TERMO DE USO E RESPONSABILIDADE\n\n1. Todo conteúdo é de sua responsabilidade.\n2. Sem links ilegais ou maliciosos.\n3. Você isenta o desenvolvedor de responsabilidade.\n\nAceita os termos?"
     },
     'en-US': {
         title: '🚀 Quick Launch',
@@ -41,7 +42,8 @@ const translations = {
         backupWarning: '🚨 PROTECT YOUR GOODS: Download your backup! This file is 100% your responsibility. We don\'t have a server, we don\'t track you. If you lose this file and wipe your browser, it\'s gone to the shadow realm. No cloud, no mercy!',
         confirmDelete: 'Are you absolutely sure you want to remove the link to <strong>{name}</strong>?',
         btnYes: 'YES 👍',
-        btnNo: 'NO 🛑'
+        btnNo: 'NO 🛑',
+        termosResp: "📜 TERMS OF USE AND RESPONSIBILITY\n\n1. All content is your sole responsibility.\n2. No illegal or malicious links allowed.\n3. You hold the developer harmless from any liability.\n\nDo you accept these terms?"
     },
     'es': {
         title: '🚀 Inicio Rápido',
@@ -63,11 +65,11 @@ const translations = {
         backupWarning: '🚨 GUERRA AVISADA NO MATA SOLDADO: ¡Baja tu copia de seguridad! Este archivo es tu responsabilidad. No tenemos acceso a nada. Si lo pierdes y limpias el navegador... ¡ya fue, mi pana! Ni el Chapulín Colorado te salva los links.',
         confirmDelete: '¿Estás absolutamente seguro de que deseas eliminar el enlace a <strong>{name}</strong>?',
         btnYes: 'SÍ 👍',
-        btnNo: 'NO 🛑'
+        btnNo: 'NO 🛑',
+        termosResp: "📜 TÉRMINO DE USO Y RESPONSABILIDAD\n\n1. Todo el contenido es tu responsabilidad.\n2. Sin enlaces ilegales o maliciosos.\n3. Eximes al desarrollador de responsabilidad.\n\n¿Aceptas los términos?"
     }
 };
 
-// Substitua o termo fixo por este que busca na tradução:
 let pages = JSON.parse(localStorage.getItem('customTabs')) || [];
 let globalAutoOpen = JSON.parse(localStorage.getItem('globalAutoOpen')) ?? false;
 let currentLang = localStorage.getItem('preferredLang');
@@ -219,22 +221,15 @@ function exportBackup() {
 }
 
 // -----------------------------------------------------------------------------
-// FUNÇÃO ATUALIZADA: IMPORTAÇÃO COM TERMOS DE RESPONSABILIDADE
+// FUNÇÃO ATUALIZADA: IMPORTAÇÃO PUXANDO TERMO DE RESPONSABILIDADE DA TRADUÇÃO
 // -----------------------------------------------------------------------------
 function importBackup(input) {
     const file = input.files[0];
     if (!file) return;
 
-    // Define o texto do termo baseado no idioma atual de forma segura
-    let termoResponsabilidade = 
-        "📜 TERMO DE USO E RESPONSABILIDADE\n\n1. Todo conteúdo é de sua responsabilidade.\n2. Sem links ilegais ou maliciosos.\n3. Você isenta o desenvolvedor de responsabilidade.\n\nAceita os termos?";
+    // Puxa o termo correto do dicionário lá de cima, baseado no idioma atual
+    const termoResponsabilidade = translations[currentLang].termosResp;
     
-    if (currentLang === 'es') {
-        termoResponsabilidade = "📜 TÉRMINO DE USO Y RESPONSABILIDAD\n\n1. Todo el contenido es tu responsabilidad.\n2. Sin enlaces ilegales o maliciosos.\n3. Eximes al desarrollador de responsabilidad.\n\n¿Aceptas los términos?";
-    } else if (currentLang === 'en-US') {
-        termoResponsabilidade = "📜 TERMS OF USE AND RESPONSIBILITY\n\n1. All content is your sole responsibility.\n2. No illegal or malicious links allowed.\n3. You hold the developer harmless from any liability.\n\nDo you accept these terms?";
-    }
-
     if (!confirm(termoResponsabilidade)) {
         input.value = '';
         return;
