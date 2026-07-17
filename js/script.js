@@ -360,3 +360,26 @@ function tocarSomMK() {
     audio.volume = 0.5;
     audio.play();
 }
+
+function iniciarCicloDeAtenção() {
+    const container = document.getElementById('mainContainer');
+    
+    // Função que executa o brilho
+    function dispararBrilho() {
+        container.classList.add('glow-effect', 'pulsing');
+        
+        // Remove após 5 segundos
+        setTimeout(() => {
+            container.classList.remove('glow-effect', 'pulsing');
+        }, 5000);
+    }
+
+    // Dispara a primeira vez ao carregar
+    dispararBrilho();
+
+    // Repete a cada 2 minutos (125 segundos totais para dar tempo do ciclo)
+    setInterval(dispararBrilho, 125000);
+}
+
+// Inicia a função quando a página carregar
+document.addEventListener('DOMContentLoaded', iniciarCicloDeAtenção);
