@@ -20,7 +20,9 @@ const translations = {
         confirmDelete: 'Você tem certeza absoluta que deseja remover o link para <strong>{name}</strong>?',
         btnYes: 'SIM 👍',
         btnNo: 'NÃO 🛑',
-        termosResp: "📜 TERMO DE USO E RESPONSABILIDADE\n\n1. Todo conteúdo é de sua responsabilidade.\n2. Sem links ilegais ou maliciosos.\n3. Você isenta o desenvolvedor de responsabilidade.\n\nAceita os termos?"
+        termosResp: "📜 TERMO DE USO E RESPONSABILIDADE\n\n1. Todo conteúdo é de sua responsabilidade.\n2. Sem links ilegais ou maliciosos.\n3. Você isenta o desenvolvedor de responsabilidade.\n\nAceita os termos?",
+        aboutTitle: '🌐 O que é isso?',
+        aboutDesc: 'Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.'
     },
     'en-US': {
         title: '🚀 Quick Launch',
@@ -43,7 +45,9 @@ const translations = {
         confirmDelete: 'Are you absolutely sure you want to remove the link to <strong>{name}</strong>?',
         btnYes: 'YES 👍',
         btnNo: 'NO 🛑',
-        termosResp: "📜 TERMS OF USE AND RESPONSIBILITY\n\n1. All content is your sole responsibility.\n2. No illegal or malicious links allowed.\n3. You hold the developer harmless from any liability.\n\nDo you accept these terms?"
+        termosResp: "📜 TERMS OF USE AND RESPONSIBILITY\n\n1. All content is your sole responsibility.\n2. No illegal or malicious links allowed.\n3. You hold the developer harmless from any liability.\n\nDo you accept these terms?",
+        aboutTitle: '🌐 What is this?',
+        aboutDesc: 'Your portable bookmarks. Save, load, and open all your work sites with a single click, on any browser or computer.'
     },
     'es': {
         title: '🚀 Inicio Rápido',
@@ -66,7 +70,9 @@ const translations = {
         confirmDelete: '¿Estás absolutamente seguro de que deseas eliminar el enlace a <strong>{name}</strong>?',
         btnYes: 'SÍ 👍',
         btnNo: 'NO 🛑',
-        termosResp: "📜 TÉRMINO DE USO Y RESPONSABILIDAD\n\n1. Todo el contenido es tu responsabilidad.\n2. Sin enlaces ilegales o maliciosos.\n3. Eximes al desarrollador de responsabilidad.\n\n¿Aceptas los términos?"
+        termosResp: "📜 TÉRMINO DE USO Y RESPONSABILIDAD\n\n1. Todo el contenido es tu responsabilidad.\n2. Sin enlaces ilegales o maliciosos.\n3. Eximes al desarrollador de responsabilidad.\n\n¿Aceptas los términos?",
+        aboutTitle: '🌐 ¿Qué es esto?',
+        aboutDesc: 'Tus marcadores portátiles. Guarda, carga y abre todos tus sitios de trabajo con un solo clic, en cualquier navegador o computadora.'
     }
 };
 
@@ -110,6 +116,10 @@ function applyLanguage(lang) {
     document.getElementById('btnDownloadBkp').innerText = t.btnDownload;
     document.getElementById('btnUploadBkp').innerText = t.btnUpload;
     document.getElementById('txtBackupWarning').innerText = t.backupWarning;
+    
+    // Novas traduções adicionadas aqui!
+    document.getElementById('txtAboutTitle').innerText = t.aboutTitle;
+    document.getElementById('txtAboutDesc').innerText = t.aboutDesc;
 
     const browserName = getBrowserName().replace('_', ' / ');
     document.getElementById('txtPopupAlert').innerText = t.popupText.replace('{browser}', browserName);
@@ -220,14 +230,10 @@ function exportBackup() {
     });
 }
 
-// -----------------------------------------------------------------------------
-// FUNÇÃO ATUALIZADA: IMPORTAÇÃO PUXANDO TERMO DE RESPONSABILIDADE DA TRADUÇÃO
-// -----------------------------------------------------------------------------
 function importBackup(input) {
     const file = input.files[0];
     if (!file) return;
 
-    // Puxa o termo correto do dicionário lá de cima, baseado no idioma atual
     const termoResponsabilidade = translations[currentLang].termosResp;
     
     if (!confirm(termoResponsabilidade)) {
@@ -372,7 +378,6 @@ document.getElementsByName('langRadio').forEach(radio => {
 // FUNÇÕES DE EASTER EGG E ANIMAÇÕES
 // -----------------------------------------------------------------------------
 function tocarSomMK() {
-    // Busca dentro da pasta 'sounds' que criamos
     var audio = new Audio('sounds/som-mk.mp3'); 
     audio.volume = 0.5;
     audio.play();
@@ -381,23 +386,17 @@ function tocarSomMK() {
 function iniciarCicloDeAtenção() {
     const container = document.getElementById('mainContainer');
     
-    // Função que executa o brilho
     function dispararBrilho() {
-        if (!container) return; // Segurança extra caso não ache o elemento
+        if (!container) return;
         container.classList.add('glow-effect', 'pulsing');
         
-        // Remove após 5 segundos
         setTimeout(() => {
             container.classList.remove('glow-effect', 'pulsing');
         }, 5000);
     }
 
-    // Dispara a primeira vez ao carregar
     dispararBrilho();
-
-    // Repete a cada 2 minutos (125 segundos totais para dar tempo do ciclo)
     setInterval(dispararBrilho, 125000);
 }
 
-// Inicia a função quando a página carregar
 document.addEventListener('DOMContentLoaded', iniciarCicloDeAtenção);
