@@ -230,19 +230,18 @@ function importBackup(input) {
     const file = input.files[0];
     if (!file) return;
 
-    // Termo de Responsabilidade que protege o seu repositório
-    const termoResponsabilidade = 
-        "📜 TERMO DE USO E RESPONSABILIDADE\n\n" +
-        "Ao carregar este arquivo, você confirma:\n" +
-        "1. Que todo o conteúdo dos links é de sua inteira responsabilidade.\n" +
-        "2. Que este arquivo não contém links para sites ilegais, vírus ou conteúdo malicioso.\n" +
-        "3. Que você isenta o desenvolvedor de qualquer responsabilidade sobre o uso desta ferramenta.\n\n" +
-        "Você confirma que leu e aceita estes termos?";
+    // Define o texto do termo baseado no idioma atual de forma segura
+    let termoResponsabilidade = 
+        "📜 TERMO DE USO E RESPONSABILIDADE\n\n1. Todo conteúdo é de sua responsabilidade.\n2. Sem links ilegais ou maliciosos.\n3. Você isenta o desenvolvedor de responsabilidade.\n\nAceita os termos?";
+    
+    if (currentLang === 'es') {
+        termoResponsabilidade = "📜 TÉRMINO DE USO Y RESPONSABILIDAD\n\n1. Todo el contenido es tu responsabilidad.\n2. Sin enlaces ilegales o maliciosos.\n3. Eximes al desarrollador de responsabilidad.\n\n¿Aceptas los términos?";
+    } else if (currentLang === 'en-US') {
+        termoResponsabilidade = "📜 TERMS OF USE AND RESPONSIBILITY\n\n1. All content is your sole responsibility.\n2. No illegal or malicious links allowed.\n3. You hold the developer harmless from any liability.\n\nDo you accept these terms?";
+    }
 
-    // A trava de segurança que exibe o aviso antes do processamento
     if (!confirm(termoResponsabilidade)) {
-        alert("Upload cancelado. O carregamento requer a aceitação dos termos.");
-        input.value = ''; // Limpa o input
+        input.value = '';
         return;
     }
 
