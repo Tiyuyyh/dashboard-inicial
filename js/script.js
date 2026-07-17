@@ -47,10 +47,10 @@ const translations = {
         title: '🚀 Inicio Rápido',
         subtitle: 'Gestor de Pestañas de Inicio',
         lblGlobal: 'Ejecutar apertura automática al iniciar la página',
-        helpGlobal: 'Si no le gusta o no desea que las pestañas se abran automáticamente, simplemente desmarque la opção de arriba.',
+        helpGlobal: 'Si no le gusta o no desea que las pestañas se abran automáticamente, simplemente desmarque la opción de arriba.',
         placeholder: 'Pegue el enlace aquí (ej: https://...)',
         btnForce: 'Forzar Apertura de Todas ⚡',
-        alertNoLinks: '¡Agregue algunos enlaces primeiro!',
+        alertNoLinks: '¡Agregue algunos enlaces primero!',
         langNotice: 'Idioma detectado automaticamente.',
         badgeLabel: 'Alertas Ocultas',
         popupText: '⚠️ ATENCIÓN POP-UP: Para el funcionamiento automático, habilite los pop-ups en su {browser} seleccionando "Permitir siempre".',
@@ -217,9 +217,28 @@ function exportBackup() {
     });
 }
 
+// -----------------------------------------------------------------------------
+// FUNÇÃO ATUALIZADA: IMPORTAÇÃO COM TERMOS DE RESPONSABILIDADE
+// -----------------------------------------------------------------------------
 function importBackup(input) {
     const file = input.files[0];
     if (!file) return;
+
+    // Termo de Responsabilidade que protege o seu repositório
+    const termoResponsabilidade = 
+        "📜 TERMO DE USO E RESPONSABILIDADE\n\n" +
+        "Ao carregar este arquivo, você confirma:\n" +
+        "1. Que todo o conteúdo dos links é de sua inteira responsabilidade.\n" +
+        "2. Que este arquivo não contém links para sites ilegais, vírus ou conteúdo malicioso.\n" +
+        "3. Que você isenta o desenvolvedor de qualquer responsabilidade sobre o uso desta ferramenta.\n\n" +
+        "Você confirma que leu e aceita estes termos?";
+
+    // A trava de segurança que exibe o aviso antes do processamento
+    if (!confirm(termoResponsabilidade)) {
+        alert("Upload cancelado. O carregamento requer a aceitação dos termos.");
+        input.value = ''; // Limpa o input
+        return;
+    }
 
     const reader = new FileReader();
     reader.onload = function(e) {
@@ -354,8 +373,11 @@ document.getElementsByName('langRadio').forEach(radio => {
     radio.addEventListener('change', (e) => changeLanguage(e.target.value));
 });
 
+// -----------------------------------------------------------------------------
+// FUNÇÕES DE EASTER EGG E ANIMAÇÕES
+// -----------------------------------------------------------------------------
 function tocarSomMK() {
-    // Agora o navegador busca dentro da pasta 'sounds'
+    // Busca dentro da pasta 'sounds' que criamos
     var audio = new Audio('sounds/som-mk.mp3'); 
     audio.volume = 0.5;
     audio.play();
@@ -366,6 +388,7 @@ function iniciarCicloDeAtenção() {
     
     // Função que executa o brilho
     function dispararBrilho() {
+        if (!container) return; // Segurança extra caso não ache o elemento
         container.classList.add('glow-effect', 'pulsing');
         
         // Remove após 5 segundos
