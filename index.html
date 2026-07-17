@@ -1,0 +1,100 @@
+<!--
+================================================================================
+🚀 PROJETO: Dashboard Inicial Rápida
+📌 VERSÃO: Beta 0.1.4 (Modular Architecture Update)
+👤 AUTORES: Tiyuyyh & Gemini AI
+   (Canal do YouTube: https://www.youtube.com/tiyuyyh)
+================================================================================
+-->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Inicial - Tiyuyyh & Gemini</title>
+    <!-- Importando o CSS externo -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="alerts-container">
+        <div class="popup-alert delete-confirm-alert" id="deleteConfirmAlert" style="display: none;">
+            <div id="txtDeleteConfirm" style="margin-bottom: 12px; line-height: 1.4;"></div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="btnDeleteYes" style="background-color: #30d158; color: white; padding: 6px 16px; font-size: 13px; width: auto;">SIM</button>
+                <button id="btnDeleteNo" style="background-color: #48484a; color: white; padding: 6px 16px; font-size: 13px; width: auto;">NÃO</button>
+            </div>
+        </div>
+
+        <div class="popup-alert" id="popupAlert">
+            <span id="txtPopupAlert"></span>
+            <button class="close-alert-btn" id="btnClosePopup">&times;</button>
+        </div>
+        <div class="popup-alert storage-alert" id="storageAlert">
+            <span id="txtStorageAlert"></span>
+            <button class="close-alert-btn" id="btnCloseStorage">&times;</button>
+        </div>
+        <div class="popup-alert progress-alert" id="progressAlert" style="display: none;">
+            <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                <span id="txtProgressStatus">Processando...</span>
+                <span id="txtProgressPercent">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+            <div id="txtProgressFileInfo" style="font-size: 11px; opacity: 0.8; font-style: italic; margin-top: 2px;"></div>
+        </div>
+    </div>
+
+    <div class="minimized-badge" id="minimizedBadge">
+        ⚠️ <span id="txtBadgeLabel">Avisos Ocultos</span>
+    </div>
+
+    <h1 id="txtTitle">🚀 Inicial Rápida</h1>
+    <div id="txtSubtitle" style="margin-bottom: 25px; color: #8e8e93; font-size: 14px;">Gerenciador de Abas de Inicialização</div>
+
+    <div class="container">
+        <div class="config-group">
+            <input type="checkbox" id="globalAutoOpen">
+            <label id="lblGlobal" style="cursor: pointer;" for="globalAutoOpen">Executar abertura automática ao iniciar a página</label>
+        </div>
+        <div class="config-help" id="txtHelpGlobal">
+            Se não gostar ou não quiser que as abas abram sozinhas, basta desmarcar a opção acima.
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="Cole o link aqui (ex: https://...)">
+            <button class="btn-add" id="btnAddPage">+</button>
+        </div>
+
+        <ul id="linksList"></ul>
+
+        <button class="btn-open-all" id="btnForceOpen">Forçar Abertura de Todas ⚡</button>
+
+        <div class="backup-warning-text" id="txtBackupWarning"></div>
+
+        <div class="backup-zone">
+            <button class="btn-backup" id="btnDownloadBkp">Baixar Arquivo 💾</button>
+            <button class="btn-backup" id="btnUploadBkp">Carregar Arquivo 📂</button>
+            <input type="file" id="fileImporter" accept=".tiyu" style="display: none;">
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>Versão Beta 0.1.4 (Criado por <a class="creator-link" href="https://www.youtube.com/tiyuyyh" target="_blank">Tiyuyyh</a> & <a class="creator-link" href="https://gemini.google.com" target="_blank">Gemini AI</a>)</div>
+        
+        <div class="lang-area">
+            <div class="lang-selectors">
+                <label><input type="radio" name="langRadio" value="pt-BR"> 🇧🇷 PT-BR</label>
+                <label><input type="radio" name="langRadio" value="en-US"> 🇺🇸 EN-US</label>
+                <label><input type="radio" name="langRadio" value="es"> 🇪🇸 ES</label>
+            </div>
+            <div class="lang-notice" id="txtLangNotice">Idioma detectado automaticamente.</div>
+        </div>
+    </div>
+
+    <!-- Importando o JavaScript externo de forma segura -->
+    <script src="js/script.js" defer></script>
+</body>
+</html>
