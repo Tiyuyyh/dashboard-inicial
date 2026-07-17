@@ -294,3 +294,20 @@ input[type="checkbox"] {
     font-style: italic;
     color: #727276;
 }
+
+/* Efeito de brilho pulsante */
+.glow-effect {
+    border: 2px solid #de5833 !important;
+    box-shadow: 0 0 15px #de5833 !important;
+    transition: all 0.5s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+.pulsing {
+    animation: pulse 1s infinite;
+}
