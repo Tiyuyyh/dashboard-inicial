@@ -353,3 +353,12 @@ document.getElementById('linksList').addEventListener('click', (e) => {
 document.getElementsByName('langRadio').forEach(radio => {
     radio.addEventListener('change', (e) => changeLanguage(e.target.value));
 });
+
+// Função para tocar o som de Mortal Kombat ao apoiar o Lab
+function tocarSomMK() {
+    // Certifique-se que o arquivo 'som-mk.mp3' esteja na mesma pasta que o seu index.html
+    // ou ajuste o caminho abaixo, ex: 'assets/som-mk.mp3'
+    var audio = new Audio('som-mk.mp3'); 
+    audio.volume = 0.5; // Ajuste o volume de 0.0 a 1.0 se precisar
+    audio.play();
+}
