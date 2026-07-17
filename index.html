@@ -54,13 +54,17 @@
     <h1 id="txtTitle">🚀 Inicial Rápida</h1>
     <div id="txtSubtitle" style="margin-bottom: 25px; color: #8e8e93; font-size: 14px;">Gerenciador de Abas de Inicialização</div>
 
-     <div class="container">
-       <div class="container">
-    <!-- O bloco que explica o que é o site agora vive AQUI dentro -->
-    <div class="explanation-box" id="mainContainer" style="margin-bottom: 20px; padding: 10px; border-radius: 8px;">
-        <h3>🌐 O que é isso?</h3>
-        <p>Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.</p>
-    </div>
+    <div class="container">
+        <!-- Bloco de explicação -->
+        <div class="explanation-box" id="mainContainer" style="margin-bottom: 20px; padding: 10px; border-radius: 8px;">
+            <h3>🌐 O que é isso?</h3>
+            <p>Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.</p>
+        </div>
+
+        <div class="config-group">
+            <input type="checkbox" id="globalAutoOpen">
+            <label id="lblGlobal" style="cursor: pointer;" for="globalAutoOpen">Executar abertura automática ao iniciar a página</label>
+        </div>
         <div class="config-help" id="txtHelpGlobal">
             Se não gostar ou não quiser que as abas abram sozinhas, basta desmarcar a opção acima.
         </div>
@@ -105,32 +109,20 @@
             "Se a cópia ficou boa, é sinal de que o trabalho valeu a pena! kkkkkkkk"
         </p>
         
-        <!-- Botões de Ação -->
         <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
-            <!-- Suporte no Discord -->
             <a href="https://discord.gg/k9YCJSsz92" target="_blank" rel="noopener noreferrer" style="color: #5865F2; text-decoration: none; font-weight: bold; padding: 6px 12px; border: 1px solid #5865F2; border-radius: 4px; transition: all 0.3s ease;">
                 💬 Suporte no Discord
             </a>
-            <!-- Doação via Paypal -->
-            <!-- Botão de Apoio Global com gatilho de som -->
             <a href="https://streamelements.com/tiyuyyh/tip" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            onclick="tocarSomMK()" 
-            style="color: #FFD700; text-decoration: none; font-weight: bold; padding: 6px 12px; border: 1px solid #FFD700; border-radius: 4px; transition: all 0.3s ease;">
-            ⭐ Apoiar o Lab (Global)
+               target="_blank" 
+               rel="noopener noreferrer" 
+               onclick="tocarSomMK()" 
+               style="color: #FFD700; text-decoration: none; font-weight: bold; padding: 6px 12px; border: 1px solid #FFD700; border-radius: 4px; transition: all 0.3s ease;">
+               ⭐ Apoiar o Lab (Global)
             </a>
         </div>
     </footer>
 
-    <!-- Importando o JavaScript externo de forma segura -->
     <script src="js/script.js" defer></script>
-   <script>
-    function tocarSomMK() {
-        // Substitua 'som-mk.mp3' pelo nome exato do arquivo que você subir no GitHub
-        var audio = new Audio('som-mk.mp3');
-        audio.play();
-    }
-</script>
 </body>
 </html>
