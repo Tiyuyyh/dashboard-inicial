@@ -17,7 +17,24 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
+   
+<!-- CORTINA DE SELEÇÃO DE IDIOMA INICIAL -->
+<div id="langStartModal" class="lang-start-modal">
+    <div class="lang-modal-content">
+        <h2>🌐 Choose your language / Escolha seu idioma / Selecciona tu idioma</h2>
+        <div class="lang-options-container">
+            <button class="lang-modal-btn" onclick="selectInitialLang('pt-BR')">
+                <span class="flag-icon">🇧🇷</span> Português (Brasil)
+            </button>
+            <button class="lang-modal-btn" onclick="selectInitialLang('en-US')">
+                <span class="flag-icon">🇺🇸</span> English (United States)
+            </button>
+            <button class="lang-modal-btn" onclick="selectInitialLang('es')">
+                <span class="flag-icon">🇪🇸</span> Español (España)
+            </button>
+        </div>
+    </div>
+</div>
     <div class="alerts-container">
         <div class="popup-alert delete-confirm-alert" id="deleteConfirmAlert" style="display: none;">
             <div id="txtDeleteConfirm" style="margin-bottom: 12px; line-height: 1.4;"></div>
