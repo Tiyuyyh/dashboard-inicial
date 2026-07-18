@@ -331,19 +331,42 @@ function openAllTabs(onlyAuto = false) {
 
 // Event Listeners Mapeados
 document.addEventListener('DOMContentLoaded', () => {
-    applyLanguage(detectSystemLanguage());
+    const savedLang = localStorage.getItem('preferredLang');
+    
+    if (!savedLang) {
+        // Se NÃO tem idioma salvo (Primeira vez), exibe a cortina
+        document.getElementById('langStartModal').style.display = 'flex';
+        // Aplica o idioma do sistema em background por segurança
+        applyLanguage(detectSystemLanguage());
+    } else {
+        // Se JÁ tem idioma salvo, pula o modal e carrega direto
+        applyLanguage(savedLang);
+        if (globalAutoOpen && pages.length > 0) {
+            setTimeout(() => openAllTabs(), 300);
+        }
+    }
+
     updateAlertsVisibility();
-    document.getElementById('globalAutoOpen').checked = globalAutoOpen;
     renderList();
 
-    if (globalAutoOpen && pages.length > 0) {
-        setTimeout(() => openAllTabs(true), 300);
-    }
     setTimeout(() => {
         if (alertsState.popupAlert) minimizeAlert('popupAlert');
         if (alertsState.storageAlert) minimizeAlert('storageAlert');
     }, 7000);
 });
+
+function selectInitialLang(lang) {
+    localStorage.setItem('preferredLang', lang);
+    applyLanguage(lang);
+    
+    // Esconde o modal
+    document.getElementById('langStartModal').style.display = 'none';
+    
+    // Se a pessoa já tinha links e o auto-open estava ativo, dispara agora
+    if (globalAutoOpen && pages.length > 0) {
+        openAllTabs();
+    }
+}
 
 document.getElementById('btnAddPage').addEventListener('click', addPage);
 document.getElementById('urlInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') addPage(); });
