@@ -328,8 +328,8 @@ input[type="checkbox"] {
 
 /* Configuração do seu ícone */
 .header-icon {
-    width: 65px; /* Tamanho aproximado desse seu quadrado amarelo */
-    height: 65px;
+    width: 18px; /* Tamanho aproximado desse seu quadrado amarelo */
+    height: 18px;
     object-fit: cover; /* Garante que a imagem não achate */
     border-radius: 50%; /* Deixa as bordas arredondadas (mude para 50% se quiser redondo igual foto de perfil) */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dá um efeitinho 3D leve */
