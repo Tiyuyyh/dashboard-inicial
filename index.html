@@ -1,7 +1,7 @@
 <!--
 ================================================================================
 🚀 PROJETO: Dashboard Inicial Rápida
-📌 VERSÃO: Beta 0.1.5 (Discord Community Update)
+📌 VERSÃO: Beta 0.1.6 (DuckDuckGo / Window Update)
 👤 AUTORES: Tiyuyyh & Gemini AI
    (Canal do YouTube: https://www.youtube.com/tiyuyyh)
 ================================================================================
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-   
+    
 <!-- CORTINA DE SELEÇÃO DE IDIOMA INICIAL -->
 <div id="langStartModal" class="lang-start-modal">
     <div class="lang-modal-content">
@@ -35,6 +35,7 @@
         </div>
     </div>
 </div>
+
     <div class="alerts-container">
         <div class="popup-alert delete-confirm-alert" id="deleteConfirmAlert" style="display: none;">
             <div id="txtDeleteConfirm" style="margin-bottom: 12px; line-height: 1.4;"></div>
@@ -77,15 +78,22 @@
         <p id="txtSubtitle">Gerenciador de Abas de Inicialização</p>
     </div>
     
-    <!-- Bloco da direita: Ícone -->
-    <img src="img/icone.png" alt="Logo Tiyuyyh" id="headerIcon" class="header-icon">
+    <!-- Bloco da direita: Ícone com Popover integrado -->
+    <div class="icon-wrapper" style="position: relative;">
+        <img src="img/icone.png" alt="Logo Tiyuyyh" id="headerIcon" class="header-icon" style="cursor: pointer;">
+        <div id="bioPopover" class="bio-popover">
+            <div class="popover-arrow"></div>
+            <h3>Tiyuyyh 🎮</h3>
+            <p>Criador de conteúdo, streamer e entusiasta tech. Painel desenvolvido para automação e privacidade total em navegadores como DuckDuckGo. 🛠️</p>
+        </div>
+    </div>
 </div>
 
     <div class="container">
         <!-- Bloco de explicação -->
         <div class="explanation-box" id="mainContainer" style="margin-bottom: 20px; padding: 10px; border-radius: 8px;">
             <h3 id="txtAboutTitle">🌐 O que é isso?</h3>
-<p id="txtAboutDesc">Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.</p>
+            <p id="txtAboutDesc">Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.</p>
 
         <div class="config-group">
             <input type="checkbox" id="globalAutoOpen">
@@ -95,14 +103,34 @@
             Se não gostar ou não quiser que as abas abram sozinhas, basta desmarcar a opção acima.
         </div>
 
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="Cole o link aqui (ex: https://...)">
-            <button class="btn-add" id="btnAddPage">+</button>
+        <!-- ==========================================
+             NOVA ÁREA DE INPUTS (URL, CAT, DESC, JANELA)
+             ========================================== -->
+        <div class="input-section" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px; margin-bottom: 20px; background-color: #1a1a1a; padding: 15px; border-radius: 10px; border: 1px solid #333;">
+            
+            <div style="display: flex; gap: 10px; width: 100%;">
+                <input type="text" id="urlInput" placeholder="URL ou Link (ex: https://...)" style="flex: 2; padding: 10px; border-radius: 6px; border: 1px solid #444; background-color: #2a2a2a; color: #fff;">
+                
+                <input type="text" id="catInput" placeholder="Categoria (máx 13)" maxlength="13" style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #444; background-color: #2a2a2a; color: #fff; text-transform: uppercase;">
+            </div>
+            
+            <div style="display: flex; gap: 10px; width: 100%;">
+                <input type="text" id="descInput" placeholder="Breve descrição do link (máx 25)" maxlength="25" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #444; background-color: #2a2a2a; color: #fff;">
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                <label style="cursor: pointer; color: #ccc; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="checkWindow"> <span id="lblWindow">🪟 Abrir como Janela (App)</span>
+                </label>
+                
+                <button class="btn-add" id="btnAddPage" style="padding: 10px 20px; font-weight: bold;">Adicionar +</button>
+            </div>
         </div>
+        <!-- ========================================== -->
 
         <ul id="linksList"></ul>
 
-        <button class="btn-open-all" id="btnForceOpen">Forçar Abertura de Todas ⚡</button>
+        <button class="btn-open-all" id="btnForceOpen">Forçar Abertura das Selecionadas ⚡</button>
 
         <div class="backup-warning-text" id="txtBackupWarning"></div>
 
@@ -114,7 +142,7 @@
     </div>
 
     <div class="footer">
-        <div>Versão Beta 0.1.5 (Criado por <a class="creator-link" href="https://www.youtube.com/tiyuyyh" target="_blank">Tiyuyyh</a> & <a class="creator-link" href="https://gemini.google.com" target="_blank">Gemini AI</a>)</div>
+        <div>Versão Beta 0.1.6 (Criado por <a class="creator-link" href="https://www.youtube.com/tiyuyyh" target="_blank">Tiyuyyh</a> & <a class="creator-link" href="https://gemini.google.com" target="_blank">Gemini AI</a>)</div>
         
         <div class="lang-area">
             <div class="lang-selectors">
