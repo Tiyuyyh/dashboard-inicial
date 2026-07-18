@@ -1,6 +1,6 @@
 # 🚀 Dashboard Inicial Rápida — Gerenciador de Inicialização
 
-![Versão](https://img.shields.io/badge/Vers%C3%A3o-Beta%200.1.4-orange)
+![Versão](https://img.shields.io/badge/Vers%C3%A3o-Beta%200.1.5-orange)
 ![Licença](https://img.shields.io/badge/Licen%C3%A7a-MIT-green)
 
 Uma ferramenta web estática, leve e moderna para gerenciar e abrir suas abas de trabalho ou rotina diária de forma automatizada. Chega de abrir 10 links manualmente toda vez que iniciar o navegador!
