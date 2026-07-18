@@ -1,23 +1,3 @@
-<!--
-================================================================================
-🚀 PROJETO: Dashboard Inicial Rápida
-📌 VERSÃO: Beta 0.1.5 (Discord Community Update)
-👤 AUTORES: Tiyuyyh & Gemini AI
-   (Canal do YouTube: https://www.youtube.com/tiyuyyh)
-================================================================================
--->
-
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Inicial - Tiyuyyh & Gemini</title>
-    <!-- Importando o CSS externo -->
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-   
 <!-- CORTINA DE SELEÇÃO DE IDIOMA INICIAL -->
 <div id="langStartModal" class="lang-start-modal">
     <div class="lang-modal-content">
@@ -35,120 +15,53 @@
         </div>
     </div>
 </div>
-    <div class="alerts-container">
-        <div class="popup-alert delete-confirm-alert" id="deleteConfirmAlert" style="display: none;">
-            <div id="txtDeleteConfirm" style="margin-bottom: 12px; line-height: 1.4;"></div>
-            <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                <button id="btnDeleteYes" style="background-color: #30d158; color: white; padding: 6px 16px; font-size: 13px; width: auto;">SIM</button>
-                <button id="btnDeleteNo" style="background-color: #48484a; color: white; padding: 6px 16px; font-size: 13px; width: auto;">NÃO</button>
-            </div>
-        </div>
 
-        <div class="popup-alert" id="popupAlert">
-            <span id="txtPopupAlert"></span>
-            <button class="close-alert-btn" id="btnClosePopup">&times;</button>
-        </div>
-        <div class="popup-alert storage-alert" id="storageAlert">
-            <span id="txtStorageAlert"></span>
-            <button class="close-alert-btn" id="btnCloseStorage">&times;</button>
-        </div>
-        <div class="popup-alert progress-alert" id="progressAlert" style="display: none;">
-            <div style="display: flex; justify-content: space-between; font-weight: bold;">
-                <span id="txtProgressStatus">Processando...</span>
-                <span id="txtProgressPercent">0%</span>
-            </div>
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progressBarFill"></div>
-            </div>
-            <!-- Texto atualizado abaixo para blindagem jurídica -->
-            <div id="txtProgressFileInfo" style="font-size: 11px; opacity: 0.8; font-style: italic; margin-top: 4px; line-height: 1.3; color: #ffbc00;">
-                ⚠️ O arquivo gerado é de sua total responsabilidade. Mantenha seus links seguros.
-            </div>
-        </div>
-
-    <div class="minimized-badge" id="minimizedBadge">
-        ⚠️ <span id="txtBadgeLabel">Avisos Ocultos</span>
-    </div>
-
+<!-- HEADER COM ÍCONE -->
 <div class="header-container">
-    <!-- Bloco da esquerda: Textos -->
     <div class="header-text">
         <h1 id="txtTitle">🚀 Inicial Rápida</h1>
         <p id="txtSubtitle">Gerenciador de Abas de Inicialização</p>
     </div>
-    
-    <!-- Bloco da direita: Ícone -->
-    <img src="img/icone.png" alt="Logo Tiyuyyh" id="headerIcon" class="header-icon">
+    <div class="icon-wrapper">
+        <!-- Ícone referenciado conforme solicitado -->
+        <img src="image_b77f1c.png" alt="Logo Tiyuyyh" id="headerIcon" class="header-icon">
+        <div id="bioPopover" class="bio-popover">
+            <div class="popover-arrow"></div>
+            <h3>Tiyuyyh 🎮</h3>
+            <p>Criador de conteúdo, streamer e entusiasta tech. Painel desenvolvido para automação e privacidade total em navegadores como DuckDuckGo. 🛠️</p>
+        </div>
+    </div>
 </div>
 
-    <div class="container">
-        <!-- Bloco de explicação -->
-        <div class="explanation-box" id="mainContainer" style="margin-bottom: 20px; padding: 10px; border-radius: 8px;">
-            <h3 id="txtAboutTitle">🌐 O que é isso?</h3>
-<p id="txtAboutDesc">Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.</p>
-
-        <div class="config-group">
-            <input type="checkbox" id="globalAutoOpen">
-            <label id="lblGlobal" style="cursor: pointer;" for="globalAutoOpen">Executar abertura automática ao iniciar a página</label>
-        </div>
-        <div class="config-help" id="txtHelpGlobal">
-            Se não gostar ou não quiser que as abas abram sozinhas, basta desmarcar a opção acima.
-        </div>
-
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="Cole o link aqui (ex: https://...)">
-            <button class="btn-add" id="btnAddPage">+</button>
-        </div>
-
-        <ul id="linksList"></ul>
-
-        <button class="btn-open-all" id="btnForceOpen">Forçar Abertura de Todas ⚡</button>
-
-        <div class="backup-warning-text" id="txtBackupWarning"></div>
-
-        <div class="backup-zone">
-            <button class="btn-backup" id="btnDownloadBkp">Baixar Arquivo 💾</button>
-            <button class="btn-backup" id="btnUploadBkp">Carregar Arquivo 📂</button>
-            <input type="file" id="fileImporter" accept=".tiyu" style="display: none;">
-        </div>
+<!-- CONTROLES GLOBAIS -->
+<div class="global-controls">
+    <label class="toggle-switch">
+        <input type="checkbox" id="globalAutoOpen">
+        <span class="slider"></span>
+    </label>
+    <div class="global-text">
+        <strong id="lblGlobal">Executar abertura automática ao iniciar a página</strong>
+        <p id="txtHelpGlobal">Se não gostar ou não quiser que as abas abram sozinhas, basta desmarcar a opção acima.</p>
     </div>
+</div>
 
-    <div class="footer">
-        <div>Versão Beta 0.1.5 (Criado por <a class="creator-link" href="https://www.youtube.com/tiyuyyh" target="_blank">Tiyuyyh</a> & <a class="creator-link" href="https://gemini.google.com" target="_blank">Gemini AI</a>)</div>
-        
-        <div class="lang-area">
-            <div class="lang-selectors">
-                <label><input type="radio" name="langRadio" value="pt-BR"> 🇧🇷 PT-BR</label>
-                <label><input type="radio" name="langRadio" value="en-US"> 🇺🇸 EN-US</label>
-                <label><input type="radio" name="langRadio" value="es"> 🇪🇸 ES</label>
-            </div>
-            <div class="lang-notice" id="txtLangNotice">Idioma detectado automaticamente.</div>
-        </div>
+<!-- NOVA ÁREA DE ADICIONAR LINKS -->
+<div class="input-section">
+    <div class="input-row">
+        <input type="text" id="urlInput" placeholder="URL ou Link (ex: https://...)">
+        <input type="text" id="catInput" placeholder="Categoria (máx 13)" maxlength="13">
     </div>
+    <div class="input-row">
+        <input type="text" id="descInput" placeholder="Breve descrição do link (máx 25)" maxlength="25">
+    </div>
+    <div class="options-row">
+        <label class="check-label">
+            <input type="checkbox" id="checkWindow"> <span id="lblWindow">🪟 Abrir como Janela (App)</span>
+        </label>
+        <button id="btnAddPage">Adicionar +</button>
+    </div>
+</div>
 
-    <!-- ==========================================================================
-         RODAPÉ / CRÉDITOS & APELO
-         ========================================================================== -->
-    <footer style="margin-top: 40px; padding: 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; color: #8e8e93; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; box-sizing: border-box;">
-        <p style="margin: 0 0 8px 0;">Desenvolvido com ☕ e determinação por <strong>Tiyuyyh</strong> & <strong>Gemini AI</strong>.</p>
-        <p style="margin: 0 0 15px 0; font-style: italic; font-size: 0.85rem;">
-            "Se a cópia ficou boa, é sinal de que o trabalho valeu a pena! kkkkkkkk"
-        </p>
-        
-        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
-            <a href="https://discord.gg/k9YCJSsz92" target="_blank" rel="noopener noreferrer" style="color: #5865F2; text-decoration: none; font-weight: bold; padding: 6px 12px; border: 1px solid #5865F2; border-radius: 4px; transition: all 0.3s ease;">
-                💬 Suporte no Discord
-            </a>
-            <a href="https://streamelements.com/tiyuyyh/tip" 
-               target="_blank" 
-               rel="noopener noreferrer" 
-               onclick="tocarSomMK()" 
-               style="color: #FFD700; text-decoration: none; font-weight: bold; padding: 6px 12px; border: 1px solid #FFD700; border-radius: 4px; transition: all 0.3s ease;">
-               ⭐ Apoiar o Lab (Global)
-            </a>
-        </div>
-    </footer>
+<button id="btnForceOpen" class="btn-force">Forçar Abertura das Selecionadas ⚡</button>
 
-    <script src="js/script.js" defer></script>
-</body>
-</html>
+<ul id="linksList"></ul>
