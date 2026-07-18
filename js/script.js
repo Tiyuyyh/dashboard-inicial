@@ -5,7 +5,11 @@ const translations = {
         lblGlobal: 'Executar abertura automática ao iniciar a página',
         helpGlobal: 'Se não gostar ou não quiser que as abas abram sozinhas, basta desmarcar a opção acima.',
         placeholder: 'Cole o link aqui (ex: https://...)',
-        btnForce: 'Forçar Abertura de Todas ⚡',
+        catPlaceholder: 'Categoria (máx 13)',
+        descPlaceholder: 'Breve descrição do link (máx 25)',
+        lblWindow: '🪟 Abrir como Janela (App)',
+        btnAdd: 'Adicionar +',
+        btnForce: 'Forçar Abertura das Selecionadas ⚡',
         alertNoLinks: 'Adicione alguns links primeiro!',
         langNotice: 'Idioma detectado automaticamente.',
         badgeLabel: 'Avisos Ocultos',
@@ -30,7 +34,11 @@ const translations = {
         lblGlobal: 'Run automatic opening when launching the page',
         helpGlobal: 'If you don\'t like it or don\'t want tabs to open automatically, just uncheck the option above.',
         placeholder: 'Paste link here (e.g., https://...)',
-        btnForce: 'Force Open All ⚡',
+        catPlaceholder: 'Category (max 13)',
+        descPlaceholder: 'Short description (max 25)',
+        lblWindow: '🪟 Open as Window (App)',
+        btnAdd: 'Add +',
+        btnForce: 'Force Open Selected ⚡',
         alertNoLinks: 'Add some links first!',
         langNotice: 'Language detected automatically.',
         badgeLabel: 'Hidden Alerts',
@@ -55,7 +63,11 @@ const translations = {
         lblGlobal: 'Ejecutar apertura automática al iniciar la página',
         helpGlobal: 'Si no le gusta o no desea que las pestañas se abran automáticamente, simplemente desmarque la opción de arriba.',
         placeholder: 'Pegue el enlace aquí (ej: https://...)',
-        btnForce: 'Forzar Apertura de Todas ⚡',
+        catPlaceholder: 'Categoría (máx 13)',
+        descPlaceholder: 'Breve descripción (máx 25)',
+        lblWindow: '🪟 Abrir como Ventana (App)',
+        btnAdd: 'Añadir +',
+        btnForce: 'Forzar Apertura ⚡',
         alertNoLinks: '¡Agregue algunos enlaces primero!',
         langNotice: 'Idioma detectado automaticamente.',
         badgeLabel: 'Alertas Ocultas',
@@ -110,6 +122,10 @@ function applyLanguage(lang) {
     document.getElementById('lblGlobal').innerText = t.lblGlobal;
     document.getElementById('txtHelpGlobal').innerText = t.helpGlobal;
     document.getElementById('urlInput').placeholder = t.placeholder;
+    document.getElementById('catInput').placeholder = t.catPlaceholder;
+    document.getElementById('descInput').placeholder = t.descPlaceholder;
+    document.getElementById('lblWindow').innerText = t.lblWindow;
+    document.getElementById('btnAddPage').innerText = t.btnAdd;
     document.getElementById('btnForceOpen').innerText = t.btnForce;
     document.getElementById('txtLangNotice').innerText = t.langNotice;
     document.getElementById('txtBadgeLabel').innerText = t.badgeLabel;
@@ -117,7 +133,6 @@ function applyLanguage(lang) {
     document.getElementById('btnUploadBkp').innerText = t.btnUpload;
     document.getElementById('txtBackupWarning').innerText = t.backupWarning;
     
-    // Novas traduções adicionadas aqui!
     document.getElementById('txtAboutTitle').innerText = t.aboutTitle;
     document.getElementById('txtAboutDesc').innerText = t.aboutDesc;
 
@@ -278,14 +293,29 @@ function cleanUrlName(urlText) {
 function renderList() {
     const listElement = document.getElementById('linksList');
     listElement.innerHTML = '';
+    
+    // Mantendo sua ordenação original!
     pages.sort((a, b) => a.name.localeCompare(b.name));
 
     pages.forEach((page, index) => {
         const li = document.createElement('li');
+        
+        // Novos elementos integrados na sua lista
+        let catHtml = page.category ? `<span class="item-cat">${page.category}</span>` : '';
+        let descHtml = page.description ? `<span class="item-desc">${page.description}</span>` : '';
+        let iconType = page.openAsWindow ? '🪟' : '📑';
+
         li.innerHTML = `
             <div class="li-left">
                 <input type="checkbox" ${page.autoOpen ? 'checked' : ''} data-index="${index}" class="chk-item">
-                <a href="${page.url}" target="_blank">${page.name}</a>
+                <div class="li-info">
+                    <div class="item-header">
+                        <a href="${page.url}" target="_blank" class="item-name">${page.name}</a>
+                        ${catHtml}
+                    </div>
+                    ${descHtml}
+                </div>
+                <span class="badge-type" title="Modo de Abertura">${iconType}</span>
             </div>
             <button class="btn-remove" data-index="${index}">-</button>
         `;
@@ -295,10 +325,27 @@ function renderList() {
 }
 
 function addPage() {
-    const input = document.getElementById('urlInput');
-    if (input.value.trim() === '') return;
-    pages.push(cleanUrlName(input.value));
-    input.value = '';
+    const urlInput = document.getElementById('urlInput');
+    const catInput = document.getElementById('catInput');
+    const descInput = document.getElementById('descInput');
+    const checkWindow = document.getElementById('checkWindow');
+
+    if (urlInput.value.trim() === '') return;
+
+    const baseData = cleanUrlName(urlInput.value);
+    
+    pages.push({
+        ...baseData,
+        category: catInput.value.trim().substring(0, 13).toUpperCase(),
+        description: descInput.value.trim().substring(0, 25),
+        openAsWindow: checkWindow.checked
+    });
+    
+    urlInput.value = '';
+    catInput.value = '';
+    descInput.value = '';
+    checkWindow.checked = false;
+    
     renderList();
 }
 
@@ -319,30 +366,41 @@ function closeDeleteConfirm(confirmed) {
 }
 
 function openAllTabs(onlyAuto = false) {
-    if (!onlyAuto && pages.length === 0) {
+    // Filtra apenas se for abertura automática, senão tenta abrir todas que o usuário selecionou
+    const linksParaAbrir = onlyAuto ? pages.filter(p => p.autoOpen) : pages.filter(p => p.autoOpen);
+
+    if (!onlyAuto && linksParaAbrir.length === 0) {
         alert(translations[currentLang].alertNoLinks);
         return;
     }
-    pages.forEach(page => {
-        if (onlyAuto && !page.autoOpen) return;
-        window.open(page.url, '_blank');
+    
+    linksParaAbrir.forEach(page => {
+        if (page.openAsWindow) {
+            // Prevenção de duplicatas criando nome único para a janela
+            const windowName = "TiyuDash_" + page.url.replace(/[^a-zA-Z0-9]/g, ''); 
+            window.open(page.url, windowName, 'width=1000,height=700,menubar=no,toolbar=no,location=no,status=no');
+        } else {
+            // Abre como aba comum
+            window.open(page.url, '_blank');
+        }
     });
 }
 
-// Event Listeners Mapeados
+// -----------------------------------------------------------------------------
+// EVENT LISTENERS E INICIALIZAÇÃO
+// -----------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('preferredLang');
     
     if (!savedLang) {
         // Se NÃO tem idioma salvo (Primeira vez), exibe a cortina
         document.getElementById('langStartModal').style.display = 'flex';
-        // Aplica o idioma do sistema em background por segurança
         applyLanguage(detectSystemLanguage());
     } else {
         // Se JÁ tem idioma salvo, pula o modal e carrega direto
         applyLanguage(savedLang);
         if (globalAutoOpen && pages.length > 0) {
-            setTimeout(() => openAllTabs(), 300);
+            setTimeout(() => openAllTabs(true), 300); // Passa true para abrir apenas as marcadas auto
         }
     }
 
@@ -353,23 +411,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if (alertsState.popupAlert) minimizeAlert('popupAlert');
         if (alertsState.storageAlert) minimizeAlert('storageAlert');
     }, 7000);
+
+    // Lógica do Popover da Bio
+    const headerIcon = document.getElementById('headerIcon');
+    const bioPopover = document.getElementById('bioPopover');
+    if (headerIcon && bioPopover) {
+        headerIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            bioPopover.classList.toggle('active');
+        });
+        document.addEventListener('click', (e) => {
+            if (!bioPopover.contains(e.target) && e.target !== headerIcon) {
+                bioPopover.classList.remove('active');
+            }
+        });
+    }
 });
 
 function selectInitialLang(lang) {
     localStorage.setItem('preferredLang', lang);
     applyLanguage(lang);
     
-    // Esconde o modal
     document.getElementById('langStartModal').style.display = 'none';
     
-    // Se a pessoa já tinha links e o auto-open estava ativo, dispara agora
     if (globalAutoOpen && pages.length > 0) {
-        openAllTabs();
+        openAllTabs(true);
     }
 }
 
 document.getElementById('btnAddPage').addEventListener('click', addPage);
-document.getElementById('urlInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') addPage(); });
+
+// Permite apertar enter em qualquer um dos inputs novos para salvar
+['urlInput', 'catInput', 'descInput'].forEach(id => {
+    document.getElementById(id).addEventListener('keypress', (e) => { 
+        if (e.key === 'Enter') addPage(); 
+    });
+});
+
 document.getElementById('btnForceOpen').addEventListener('click', () => openAllTabs(false));
 document.getElementById('btnDownloadBkp').addEventListener('click', exportBackup);
 document.getElementById('btnUploadBkp').addEventListener('click', () => document.getElementById('fileImporter').click());
@@ -379,10 +457,12 @@ document.getElementById('btnCloseStorage').addEventListener('click', () => minim
 document.getElementById('minimizedBadge').addEventListener('click', restoreAlertas);
 document.getElementById('btnDeleteYes').addEventListener('click', () => closeDeleteConfirm(true));
 document.getElementById('btnDeleteNo').addEventListener('click', () => closeDeleteConfirm(false));
+
 document.getElementById('globalAutoOpen').addEventListener('change', function() {
     globalAutoOpen = this.checked;
     localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
 });
+
 document.getElementById('linksList').addEventListener('click', (e) => {
     const idx = e.target.getAttribute('data-index');
     if (idx !== null) {
@@ -393,6 +473,7 @@ document.getElementById('linksList').addEventListener('click', (e) => {
         }
     }
 });
+
 document.getElementsByName('langRadio').forEach(radio => {
     radio.addEventListener('change', (e) => changeLanguage(e.target.value));
 });
