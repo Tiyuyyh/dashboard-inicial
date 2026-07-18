@@ -311,3 +311,32 @@ input[type="checkbox"] {
 .pulsing {
     animation: pulse 1s infinite;
 }
+
+/* Container principal que separa os lados */
+.header-container {
+    display: flex;
+    justify-content: space-between; /* Empurra o texto pra esquerda e a foto pra direita */
+    align-items: center; /* Centraliza a imagem com o texto verticalmente */
+    margin-bottom: 20px; /* Mantém um respiro para o bloco de baixo */
+}
+
+/* (Opcional) Tira a margem padrão do texto caso ele fique desalinhado */
+.header-text h1, 
+.header-text p {
+    margin: 0;
+}
+
+/* Configuração do seu ícone */
+.header-icon {
+    width: 65px; /* Tamanho aproximado desse seu quadrado amarelo */
+    height: 65px;
+    object-fit: cover; /* Garante que a imagem não achate */
+    border-radius: 12px; /* Deixa as bordas arredondadas (mude para 50% se quiser redondo igual foto de perfil) */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dá um efeitinho 3D leve */
+    transition: transform 0.2s ease; /* Prepara para animação */
+}
+
+/* Um efeitinho extra de quando passar o mouse por cima */
+.header-icon:hover {
+    transform: scale(1.1);
+}
