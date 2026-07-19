@@ -1,16 +1,18 @@
 const translations = {
     'pt-BR': {
         title: '🚀 Inicial Rápida',
+        btnDiscord: '💬 Suporte no Discord',
+        btnTip: '⭐ Apoiar o Lab (Global)',
         subtitle: 'Gerenciador de Abas de Inicialização',
         lblGlobal: 'Executar abertura automática ao iniciar a página',
+        lblGlobalMode: '📋 Modo de abertura:',
+        optTab: '📑 Abrir tudo como Abas',
+        optWindow: '🪟 Abrir tudo como Janelas (App)',
+        btnSetHomepage: '🏠 Página Inicial',
         helpGlobal: 'Se não gostar ou não quiser que as abas abram sozinhas, basta desmarcar a opção acima.',
         placeholder: 'Cole o link aqui (ex: https://...)',
-        catPlaceholder: 'Categoria (máx 13)',
-        descPlaceholder: 'Breve descrição do link (máx 25)',
-        lblWindow: '🪟 Abrir como Janela (App)',
-        btnAdd: 'Adicionar +',
         btnForce: 'Forçar Abertura das Selecionadas ⚡',
-        alertNoLinks: 'Adicione alguns links primeiro!',
+        alertNoLinks: 'Marque pelo menos um link na lista para abrir!',
         langNotice: 'Idioma detectado automaticamente.',
         badgeLabel: 'Avisos Ocultos',
         popupText: '⚠️ ATENÇÃO POP-UP: Para o funcionamento automático, libere os pop-ups no seu {browser} selecionando "Sempre permitir".',
@@ -26,20 +28,24 @@ const translations = {
         btnNo: 'NÃO 🛑',
         termosResp: "📜 TERMO DE USO E RESPONSABILIDADE\n\n1. Todo conteúdo é de sua responsabilidade.\n2. Sem links ilegais ou maliciosos.\n3. Você isenta o desenvolvedor de responsabilidade.\n\nAceita os termos?",
         aboutTitle: '🌐 O que é isso?',
-        aboutDesc: 'Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.'
+        aboutDesc: 'Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.',
+        guideTitle: '📌 COMO FIXAR COMO PÁGINA INICIAL NO {browser}:\n\n',
+        guideDDG: '1. Clique nos 3 pontinhos (Menu) no canto superior direito.\n2. Vá em Configurações.\n3. Procure por "Página Inicial".\n4. Ative e cole o link atual deste painel lá!\n\nLink do Painel copiado para sua área de transferência!'
     },
     'en-US': {
         title: '🚀 Quick Launch',
+        btnDiscord: '💬 Discord Support',
+        btnTip: '⭐ Support the Lab (Global)',
         subtitle: 'Startup Tab Manager',
         lblGlobal: 'Run automatic opening when launching the page',
+        lblGlobalMode: '📋 Default opening mode:',
+        optTab: '📑 Open all as Tabs',
+        optWindow: '🪟 Open all as Windows (App)',
+        btnSetHomepage: '🏠 Homepage',
         helpGlobal: 'If you don\'t like it or don\'t want tabs to open automatically, just uncheck the option above.',
         placeholder: 'Paste link here (e.g., https://...)',
-        catPlaceholder: 'Category (max 13)',
-        descPlaceholder: 'Short description (max 25)',
-        lblWindow: '🪟 Open as Window (App)',
-        btnAdd: 'Add +',
         btnForce: 'Force Open Selected ⚡',
-        alertNoLinks: 'Add some links first!',
+        alertNoLinks: 'Check at least one link on the list to open!',
         langNotice: 'Language detected automatically.',
         badgeLabel: 'Hidden Alerts',
         popupText: '⚠️ POP-UP ATTENTION: For automatic operation, allow pop-ups in your {browser} by selecting "Always allow".',
@@ -55,43 +61,52 @@ const translations = {
         btnNo: 'NO 🛑',
         termosResp: "📜 TERMS OF USE AND RESPONSIBILITY\n\n1. All content is your sole responsibility.\n2. No illegal or malicious links allowed.\n3. You hold the developer harmless from any liability.\n\nDo you accept these terms?",
         aboutTitle: '🌐 What is this?',
-        aboutDesc: 'Your portable bookmarks. Save, load, and open all your work sites with a single click, on any browser or computer.'
+        aboutDesc: 'Your portable bookmarks. Save, load, and open all your work sites with a single click, on any browser or computer.',
+        guideTitle: '📌 HOW TO SET AS HOMEPAGE IN {browser}:\n\n',
+        guideDDG: '1. Click the 3 dots (Menu) on the top right corner.\n2. Go to Settings.\n3. Search for "Homepage".\n4. Enable it and paste this panel\'s current URL there!\n\nPanel link copied to your clipboard!'
     },
     'es': {
         title: '🚀 Inicio Rápido',
+        btnDiscord: '💬 Soporte en Discord',
+        btnTip: '⭐ Apoyar el Lab (Global)',
         subtitle: 'Gestor de Pestañas de Inicio',
-        lblGlobal: 'Ejecutar apertura automática al iniciar la página',
-        helpGlobal: 'Si no le gusta o no desea que las pestañas se abran automáticamente, simplemente desmarque la opción de arriba.',
+        lblGlobal: 'Ejecutar apertura automática al iniciar a la página',
+        lblGlobalMode: '📋 Modo de apertura por defecto:',
+        optTab: '📑 Abrir todo como Pestañas',
+        optWindow: '🪟 Abrir todo como Ventanas (App)',
+        btnSetHomepage: '🏠 Inicio',
+        helpGlobal: 'Si no le gusta o no deseja que las pestañas se abran automáticamente, simplemente desmarque la opción de arriba.',
         placeholder: 'Pegue el enlace aquí (ej: https://...)',
-        catPlaceholder: 'Categoría (máx 13)',
-        descPlaceholder: 'Breve descripción (máx 25)',
-        lblWindow: '🪟 Abrir como Ventana (App)',
-        btnAdd: 'Añadir +',
         btnForce: 'Forzar Apertura ⚡',
-        alertNoLinks: '¡Agregue algunos enlaces primero!',
+        alertNoLinks: '¡Marque al menos un enlace en la lista para abrir!',
         langNotice: 'Idioma detectado automaticamente.',
         badgeLabel: 'Alertas Ocultas',
         popupText: '⚠️ ATENCIÓN POP-UP: Para el funcionamiento automático, habilite los pop-ups en su {browser} seleccionando "Permitir siempre".',
-        storageText: '⚠️ ALERTA DE DATOS: Tus enlaces se guardan localmente en este navegador. ¡Borrar el historial/cookies (o usar el botón "Fire") los eliminará! Agrega esta URL a las excepciones de limpieza de tu navegador.',
+        storageText: '⚠️ ALERTA DE DADOS: Tus enlaces se guardan localmente en este navegador. ¡Borrar el historial/cookies (o usar el botón "Fire") los eliminará! Agrega esta URL a las excepciones de limpieza de tu navegador.',
         btnDownload: 'Descargar Archivo 💾',
         btnUpload: 'Cargar Archivo 📂',
-        statusExport: 'Creando Archivo de Seguridad...',
-        statusImport: 'Validando y Extrayendo Datos...',
+        statusExport: 'Creando Archivo de Segurança...',
+        statusImport: 'Validando e Extraendo Datos...',
         errInvalidFile: '❌ ¡Archivo de copia de seguridad inválido o dañado!',
         backupWarning: '🚨 GUERRA AVISADA NO MATA SOLDADO: ¡Baja tu copia de seguridad! Este archivo es tu responsabilidad. No tenemos acceso a nada. Si lo pierdes y limpias el navegador... ¡ya fue, mi pana! Ni el Chapulín Colorado te salva los links.',
         confirmDelete: '¿Estás absolutamente seguro de que deseas eliminar el enlace a <strong>{name}</strong>?',
         btnYes: 'SÍ 👍',
         btnNo: 'NO 🛑',
-        termosResp: "📜 TÉRMINO DE USO Y RESPONSABILIDAD\n\n1. Todo el contenido es tu responsabilidad.\n2. Sin enlaces ilegales o maliciosos.\n3. Eximes al desarrollador de responsabilidad.\n\n¿Aceptas los términos?",
+        termosResp: "📜 TÉRMINO DE USO E RESPONSABILIDAD\n\n1. Todo el contenido es tu responsabilidad.\n2. Sin enlaces ilegales o maliciosos.\n3. Eximes al desarrollador de responsabilidad.\n\n¿Aceptas los términos?",
         aboutTitle: '🌐 ¿Qué es esto?',
-        aboutDesc: 'Tus marcadores portátiles. Guarda, carga y abre todos tus sitios de trabajo con un solo clic, en cualquier navegador o computadora.'
+        aboutDesc: 'Tus marcadores portátiles. Guarda, carga y abre todos tus sitios de trabalho con un solo clic, en cualquier navegador o computadora.',
+        guideTitle: '📌 CÓMO FIJAR INICIO EN {browser}:\n\n',
+        guideDDG: '1. Haz clic en los 3 puntos (Menú) arriba a la derecha.\n2. Entra en Configuración.\n3. Busca "Página de Inicio".\n4. ¡Actívalo y pega la URL de este panel allí!\n\n¡Enlace del panel copiado al portapapeles!'
     }
 };
 
 let pages = JSON.parse(localStorage.getItem('customTabs')) || [];
 let globalAutoOpen = JSON.parse(localStorage.getItem('globalAutoOpen')) ?? false;
+let globalOpenMode = localStorage.getItem('globalOpenMode') || 'tab';
 let currentLang = localStorage.getItem('preferredLang');
 let pendingDeleteIndex = null;
+let tempUrlData = null;
+let isCustomCategoryActive = false;
 
 let alertsState = JSON.parse(localStorage.getItem('alertsState')) || { popupAlert: true, storageAlert: true };
 
@@ -99,8 +114,8 @@ function getBrowserName() {
     const ua = navigator.userAgent;
     if (ua.includes("DuckDuckGo") || ua.includes("DDG") || window.duckduckgo || navigator.duckduckgo) return "DuckDuckGo";
     if (ua.includes("Edg/")) return "Microsoft Edge";
-    if (ua.includes("Chrome") && !ua.includes("Chromium")) return "DuckDuckGo_Chrome";
-    if (ua.includes("Firefox")) return "Mozilla_Firefox";
+    if (ua.includes("Chrome") && !ua.includes("Chromium")) return "Google Chrome";
+    if (ua.includes("Firefox")) return "Mozilla Firefox";
     if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
     return "DuckDuckGo";
 }
@@ -120,23 +135,25 @@ function applyLanguage(lang) {
     document.getElementById('txtTitle').innerText = t.title;
     document.getElementById('txtSubtitle').innerText = t.subtitle;
     document.getElementById('lblGlobal').innerText = t.lblGlobal;
+    document.getElementById('lblGlobalMode').innerText = t.lblGlobalMode;
     document.getElementById('txtHelpGlobal').innerText = t.helpGlobal;
     document.getElementById('urlInput').placeholder = t.placeholder;
-    document.getElementById('catInput').placeholder = t.catPlaceholder;
-    document.getElementById('descInput').placeholder = t.descPlaceholder;
-    document.getElementById('lblWindow').innerText = t.lblWindow;
-    document.getElementById('btnAddPage').innerText = t.btnAdd;
     document.getElementById('btnForceOpen').innerText = t.btnForce;
     document.getElementById('txtLangNotice').innerText = t.langNotice;
     document.getElementById('txtBadgeLabel').innerText = t.badgeLabel;
     document.getElementById('btnDownloadBkp').innerText = t.btnDownload;
     document.getElementById('btnUploadBkp').innerText = t.btnUpload;
     document.getElementById('txtBackupWarning').innerText = t.backupWarning;
-    
     document.getElementById('txtAboutTitle').innerText = t.aboutTitle;
     document.getElementById('txtAboutDesc').innerText = t.aboutDesc;
+    document.getElementById('btnSetHomepage').innerText = t.btnSetHomepage;
 
-    const browserName = getBrowserName().replace('_', ' / ');
+    // Atualiza opções internas do Dropdown mantendo os ícones
+    const modeSelect = document.getElementById('globalOpenMode');
+    modeSelect.options[0].text = t.optTab;
+    modeSelect.options[1].text = t.optWindow;
+
+    const browserName = getBrowserName();
     document.getElementById('txtPopupAlert').innerText = t.popupText.replace('{browser}', browserName);
     document.getElementById('txtStorageAlert').innerText = t.storageText;
 
@@ -150,6 +167,9 @@ function applyLanguage(lang) {
     radios.forEach(radio => {
         if (radio.value === lang) radio.checked = true;
     });
+    
+    document.getElementById('btnDiscord').innerText = t.btnDiscord;
+    document.getElementById('btnTip').innerText = t.btnTip;
 }
 
 function changeLanguage(lang) {
@@ -215,12 +235,12 @@ function runBackupAnimation(statusText, fileName, fileSizeText, callback) {
                 callback();
             }, 400);
         }
-    }, 60);
+    }, 30);
 }
 
 function generateFileName() {
     const now = new Date();
-    const browser = getBrowserName();
+    const browser = getBrowserName().replace(' ', '_');
     return `backup_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${browser}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}.tiyu`;
 }
 
@@ -230,7 +250,7 @@ function formatBytes(bytes) {
 }
 
 function exportBackup() {
-    const packageData = { signature: "TIYU_DASH_BKP", globalAutoOpen, customTabs: pages };
+    const packageData = { signature: "TIYU_DASH_BKP", globalAutoOpen, globalOpenMode, customTabs: pages };
     const rawJson = JSON.stringify(packageData);
     const encryptedData = btoa(unescape(encodeURIComponent(rawJson)));
     const blob = new Blob([encryptedData], { type: 'text/plain' });
@@ -250,7 +270,6 @@ function importBackup(input) {
     if (!file) return;
 
     const termoResponsabilidade = translations[currentLang].termosResp;
-    
     if (!confirm(termoResponsabilidade)) {
         input.value = '';
         return;
@@ -265,9 +284,14 @@ function importBackup(input) {
                 if (importedObj.signature !== "TIYU_DASH_BKP") throw new Error();
 
                 globalAutoOpen = importedObj.globalAutoOpen ?? false;
+                globalOpenMode = importedObj.globalOpenMode || 'tab';
                 pages = importedObj.customTabs || [];
+                
                 document.getElementById('globalAutoOpen').checked = globalAutoOpen;
+                document.getElementById('globalOpenMode').value = globalOpenMode;
+                
                 localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
+                localStorage.setItem('globalOpenMode', globalOpenMode);
                 renderList();
             } catch (err) {
                 alert(translations[currentLang].errInvalidFile);
@@ -294,16 +318,13 @@ function renderList() {
     const listElement = document.getElementById('linksList');
     listElement.innerHTML = '';
     
-    // Mantendo sua ordenação original!
     pages.sort((a, b) => a.name.localeCompare(b.name));
 
     pages.forEach((page, index) => {
         const li = document.createElement('li');
-        
-        // Novos elementos integrados na sua lista
         let catHtml = page.category ? `<span class="item-cat">${page.category}</span>` : '';
         let descHtml = page.description ? `<span class="item-desc">${page.description}</span>` : '';
-        let iconType = page.openAsWindow ? '🪟' : '📑';
+        let iconType = globalOpenMode === 'window' ? '🪟' : '📑';
 
         li.innerHTML = `
             <div class="li-left">
@@ -315,7 +336,7 @@ function renderList() {
                     </div>
                     ${descHtml}
                 </div>
-                <span class="badge-type" title="Modo de Abertura">${iconType}</span>
+                <span class="badge-type" title="Diretriz Global de Tela">${iconType}</span>
             </div>
             <button class="btn-remove" data-index="${index}">-</button>
         `;
@@ -324,30 +345,82 @@ function renderList() {
     localStorage.setItem('customTabs', JSON.stringify(pages));
 }
 
-function addPage() {
+function openConfigModalFlow() {
     const urlInput = document.getElementById('urlInput');
-    const catInput = document.getElementById('catInput');
-    const descInput = document.getElementById('descInput');
-    const checkWindow = document.getElementById('checkWindow');
-
     if (urlInput.value.trim() === '') return;
 
-    const baseData = cleanUrlName(urlInput.value);
+    tempUrlData = cleanUrlName(urlInput.value);
     
-    pages.push({
-        ...baseData,
-        category: catInput.value.trim().substring(0, 13).toUpperCase(),
-        description: descInput.value.trim().substring(0, 25),
-        openAsWindow: checkWindow.checked
-    });
+    document.getElementById('linkConfigModal').classList.add('active');
+    document.getElementById('modalQuestion').classList.remove('hidden-element');
+    document.getElementById('modalFieldsData').classList.remove('expanded');
+    document.getElementById('btnModalNo').classList.remove('hidden-element');
+    document.getElementById('btnModalYes').classList.remove('hidden-element');
+    document.getElementById('btnModalSaveFinal').classList.add('hidden-element');
     
-    urlInput.value = '';
-    catInput.value = '';
-    descInput.value = '';
-    checkWindow.checked = false;
-    
-    renderList();
+    document.getElementById('descInput').value = '';
+    resetCategoryToggle();
 }
+
+function closeConfigModalFlow() {
+    document.getElementById('linkConfigModal').classList.remove('active');
+    document.getElementById('urlInput').value = '';
+    tempUrlData = null;
+}
+
+function resetCategoryToggle() {
+    isCustomCategoryActive = false;
+    document.getElementById('catSelect').classList.remove('hidden-element');
+    document.getElementById('catInputCustom').classList.add('hidden-element');
+    document.getElementById('catInputCustom').value = '';
+    document.getElementById('catSelect').selectedIndex = 0;
+}
+
+document.getElementById('btnModalNo').addEventListener('click', () => {
+    if (!tempUrlData) return;
+    pages.push({ ...tempUrlData, category: '', description: '' });
+    renderList();
+    closeConfigModalFlow();
+});
+
+document.getElementById('btnModalYes').addEventListener('click', () => {
+    document.getElementById('modalQuestion').classList.add('hidden-element');
+    document.getElementById('modalFieldsData').classList.add('expanded');
+    document.getElementById('btnModalNo').classList.add('hidden-element');
+    document.getElementById('btnModalYes').classList.add('hidden-element');
+    document.getElementById('btnModalSaveFinal').classList.remove('hidden-element');
+});
+
+document.getElementById('btnEditCategory').addEventListener('click', () => {
+    isCustomCategoryActive = !isCustomCategoryActive;
+    if (isCustomCategoryActive) {
+        document.getElementById('catSelect').classList.add('hidden-element');
+        document.getElementById('catInputCustom').classList.remove('hidden-element');
+        document.getElementById('catInputCustom').focus();
+    } else {
+        document.getElementById('catSelect').classList.remove('hidden-element');
+        document.getElementById('catInputCustom').classList.add('hidden-element');
+    }
+});
+
+document.getElementById('btnModalSaveFinal').addEventListener('click', () => {
+    if (!tempUrlData) return;
+    
+    let finalCategory = isCustomCategoryActive ? 
+        document.getElementById('catInputCustom').value.trim().toUpperCase() : 
+        document.getElementById('catSelect').value;
+    
+    const finalDesc = document.getElementById('descInput').value.trim();
+
+    pages.push({
+        ...tempUrlData,
+        category: finalCategory.substring(0, 13),
+        description: finalDesc.substring(0, 25)
+    });
+
+    renderList();
+    closeConfigModalFlow();
+});
 
 function removePage(index) {
     pendingDeleteIndex = index;
@@ -365,42 +438,64 @@ function closeDeleteConfirm(confirmed) {
     pendingDeleteIndex = null;
 }
 
+// ABERTURA DE ACORDO COM AS NOVAS DIRETRIZES GLOBAIS DE TELA
 function openAllTabs(onlyAuto = false) {
-    // Filtra apenas se for abertura automática, senão tenta abrir todas que o usuário selecionou
-    const linksParaAbrir = onlyAuto ? pages.filter(p => p.autoOpen) : pages.filter(p => p.autoOpen);
+    let linksParaAbrir = [];
+
+    if (onlyAuto) {
+        linksParaAbrir = pages.filter(p => p.autoOpen);
+    } else {
+        const checkedBoxes = document.querySelectorAll('.chk-item:checked');
+        checkedBoxes.forEach(box => {
+            const idx = parseInt(box.getAttribute('data-index'));
+            if (pages[idx]) linksParaAbrir.push(pages[idx]);
+        });
+    }
 
     if (!onlyAuto && linksParaAbrir.length === 0) {
         alert(translations[currentLang].alertNoLinks);
         return;
     }
     
-    linksParaAbrir.forEach(page => {
-        if (page.openAsWindow) {
-            // Prevenção de duplicatas criando nome único para a janela
-            const windowName = "TiyuDash_" + page.url.replace(/[^a-zA-Z0-9]/g, ''); 
-            window.open(page.url, windowName, 'width=1000,height=700,menubar=no,toolbar=no,location=no,status=no');
-        } else {
-            // Abre como aba comum
-            window.open(page.url, '_blank');
-        }
+    linksParaAbrir.forEach((page, i) => {
+        const safeWindowName = "Tiyu_" + page.name.replace(/[^a-zA-Z0-9]/g, '');
+
+        setTimeout(() => {
+            if (globalOpenMode === 'window') {
+                window.open(page.url, safeWindowName, 'width=1000,height=700,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
+            } else {
+                window.open(page.url, safeWindowName);
+            }
+        }, i * 300);
     });
 }
 
-// -----------------------------------------------------------------------------
-// EVENT LISTENERS E INICIALIZAÇÃO
-// -----------------------------------------------------------------------------
+// ASSISTENTE DE DETECÇÃO PARA PÁGINA INICIAL
+function showHomepageGuide() {
+    const browser = getBrowserName();
+    const currentUrl = window.location.href;
+    
+    // Copia o link atual automaticamente para poupar o usuário
+    navigator.clipboard.writeText(currentUrl).then(() => {
+        const t = translations[currentLang];
+        let infoMsg = t.guideTitle.replace('{browser}', browser) + t.guideDDG;
+        alert(infoMsg);
+    }).catch(() => {
+        alert("Copie o link da barra de endereços e coloque nas configurações do seu navegador como página inicial!");
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('preferredLang');
+    document.getElementById('globalOpenMode').value = globalOpenMode;
     
     if (!savedLang) {
-        // Se NÃO tem idioma salvo (Primeira vez), exibe a cortina
         document.getElementById('langStartModal').style.display = 'flex';
         applyLanguage(detectSystemLanguage());
     } else {
-        // Se JÁ tem idioma salvo, pula o modal e carrega direto
         applyLanguage(savedLang);
         if (globalAutoOpen && pages.length > 0) {
-            setTimeout(() => openAllTabs(true), 300); // Passa true para abrir apenas as marcadas auto
+            setTimeout(() => openAllTabs(true), 300);
         }
     }
 
@@ -412,7 +507,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (alertsState.storageAlert) minimizeAlert('storageAlert');
     }, 7000);
 
-    // Lógica do Popover da Bio
     const headerIcon = document.getElementById('headerIcon');
     const bioPopover = document.getElementById('bioPopover');
     if (headerIcon && bioPopover) {
@@ -431,21 +525,17 @@ document.addEventListener('DOMContentLoaded', () => {
 function selectInitialLang(lang) {
     localStorage.setItem('preferredLang', lang);
     applyLanguage(lang);
-    
     document.getElementById('langStartModal').style.display = 'none';
-    
+
     if (globalAutoOpen && pages.length > 0) {
         openAllTabs(true);
     }
 }
 
-document.getElementById('btnAddPage').addEventListener('click', addPage);
 
-// Permite apertar enter em qualquer um dos inputs novos para salvar
-['urlInput', 'catInput', 'descInput'].forEach(id => {
-    document.getElementById(id).addEventListener('keypress', (e) => { 
-        if (e.key === 'Enter') addPage(); 
-    });
+document.getElementById('btnStartAdd').addEventListener('click', openConfigModalFlow);
+document.getElementById('urlInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') openConfigModalFlow();
 });
 
 document.getElementById('btnForceOpen').addEventListener('click', () => openAllTabs(false));
@@ -457,10 +547,18 @@ document.getElementById('btnCloseStorage').addEventListener('click', () => minim
 document.getElementById('minimizedBadge').addEventListener('click', restoreAlertas);
 document.getElementById('btnDeleteYes').addEventListener('click', () => closeDeleteConfirm(true));
 document.getElementById('btnDeleteNo').addEventListener('click', () => closeDeleteConfirm(false));
+document.getElementById('btnSetHomepage').addEventListener('click', showHomepageGuide);
 
 document.getElementById('globalAutoOpen').addEventListener('change', function() {
     globalAutoOpen = this.checked;
     localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
+});
+
+// Listener do novo Dropdown global de Modo de Abertura
+document.getElementById('globalOpenMode').addEventListener('change', function() {
+    globalOpenMode = this.value;
+    localStorage.setItem('globalOpenMode', globalOpenMode);
+    renderList(); // Atualiza os ícones internos da lista dinamicamente
 });
 
 document.getElementById('linksList').addEventListener('click', (e) => {
@@ -478,9 +576,6 @@ document.getElementsByName('langRadio').forEach(radio => {
     radio.addEventListener('change', (e) => changeLanguage(e.target.value));
 });
 
-// -----------------------------------------------------------------------------
-// FUNÇÕES DE EASTER EGG E ANIMAÇÕES
-// -----------------------------------------------------------------------------
 function tocarSomMK() {
     var audio = new Audio('sounds/som-mk.mp3'); 
     audio.volume = 0.5;
@@ -489,18 +584,12 @@ function tocarSomMK() {
 
 function iniciarCicloDeAtenção() {
     const container = document.getElementById('mainContainer');
-    
     function dispararBrilho() {
         if (!container) return;
         container.classList.add('glow-effect', 'pulsing');
-        
-        setTimeout(() => {
-            container.classList.remove('glow-effect', 'pulsing');
-        }, 5000);
+        setTimeout(() => { container.classList.remove('glow-effect', 'pulsing'); }, 5000);
     }
-
     dispararBrilho();
     setInterval(dispararBrilho, 125000);
 }
-
 document.addEventListener('DOMContentLoaded', iniciarCicloDeAtenção);
