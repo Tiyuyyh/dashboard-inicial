@@ -212,6 +212,16 @@ function applyLanguage(lang) {
     
     // Atualiza os campos de Adicionar
     document.getElementById('btnAddItem').innerText = t.btnAddItem;
+
+    // Traduções do Modal de Categoria/Descrição
+    document.getElementById('modalTitle').innerText = t.modalTitle;
+    document.getElementById('modalQuestion').innerText = t.modalQuestion;
+    document.getElementById('catInputCustom').placeholder = t.catInputCustom;
+    document.getElementById('btnEditCategory').innerText = t.btnEditCategory;
+    document.getElementById('descInput').placeholder = t.descInput;
+    document.getElementById('btnModalNo').innerText = t.btnModalNo;
+    document.getElementById('btnModalYes').innerText = t.btnModalYes;
+    document.getElementById('btnModalSaveFinal').innerText = t.btnModalSaveFinal;
     
     // Se Categoria e Descrição forem Inputs (espaço de digitar), atualizamos o placeholder:
     document.getElementById('catInput').placeholder = t.placeholderCat;
