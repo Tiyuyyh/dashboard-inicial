@@ -185,7 +185,19 @@ function applyLanguage(lang) {
     
     document.getElementById('btnDiscord').innerText = t.btnDiscord;
     document.getElementById('btnTip').innerText = t.btnTip;
-}
+    
+    // Atualiza os campos de Adicionar
+    document.getElementById('btnAddItem').innerText = t.btnAddItem;
+    
+    // Se Categoria e Descrição forem Inputs (espaço de digitar), atualizamos o placeholder:
+    document.getElementById('catInput').placeholder = t.placeholderCat;
+    document.getElementById('descInput').placeholder = t.placeholderDesc;
+
+    // Se o filtro de categorias tiver uma opção padrão tipo "Todas as Categorias":
+    const filterSelect = document.getElementById('categoryFilter');
+    if (filterSelect && filterSelect.options.length > 0) {
+        filterSelect.options[0].text = t.filterAll; 
+    }
 
 function changeLanguage(lang) {
     localStorage.setItem('preferredLang', lang);
