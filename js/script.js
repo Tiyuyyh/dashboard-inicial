@@ -189,14 +189,16 @@ function applyLanguage(lang) {
 
     // Atualiza opções internas do Dropdown mantendo os ícones
     const modeSelect = document.getElementById('globalOpenMode');
-    modeSelect.options[0].text = t.optTab;
-    modeSelect.options[1].text = t.optWindow;
+    if (modeSelect && modeSelect.options.length >= 2) {
+        modeSelect.options[0].text = t.optTab;
+        modeSelect.options[1].text = t.optWindow;
+    }
 
     const browserName = getBrowserName();
     document.getElementById('txtPopupAlert').innerText = t.popupText.replace('{browser}', browserName);
     document.getElementById('txtStorageAlert').innerText = t.storageText;
 
-    if (pendingDeleteIndex !== null) {
+    if (pendingDeleteIndex !== null && pages[pendingDeleteIndex]) {
         document.getElementById('txtDeleteConfirm').innerHTML = t.confirmDelete.replace('{name}', pages[pendingDeleteIndex].name);
         document.getElementById('btnDeleteYes').innerText = t.btnYes;
         document.getElementById('btnDeleteNo').innerText = t.btnNo;
@@ -210,8 +212,9 @@ function applyLanguage(lang) {
     document.getElementById('btnDiscord').innerText = t.btnDiscord;
     document.getElementById('btnTip').innerText = t.btnTip;
     
-    // Atualiza os campos de Adicionar
-    document.getElementById('btnAddItem').innerText = t.btnAddItem;
+    // Atualiza o botão de Adicionar (Ajustado id correto: btnStartAdd)
+    const btnStartAdd = document.getElementById('btnStartAdd');
+    if (btnStartAdd) btnStartAdd.innerText = t.btnAddItem + ' +';
 
     // Traduções do Modal de Categoria/Descrição
     document.getElementById('modalTitle').innerText = t.modalTitle;
@@ -223,15 +226,15 @@ function applyLanguage(lang) {
     document.getElementById('btnModalYes').innerText = t.btnModalYes;
     document.getElementById('btnModalSaveFinal').innerText = t.btnModalSaveFinal;
     
-    // Se Categoria e Descrição forem Inputs (espaço de digitar), atualizamos o placeholder:
-    document.getElementById('catInput').placeholder = t.placeholderCat;
-    document.getElementById('descInput').placeholder = t.placeholderDesc;
+    // Ajustado id do input de categoria personalizada
+    const catInputCustom = document.getElementById('catInputCustom');
+    if (catInputCustom) catInputCustom.placeholder = t.catInputCustom;
 
-    // Se o filtro de categorias tiver uma opção padrão tipo "Todas as Categorias":
     const filterSelect = document.getElementById('categoryFilter');
     if (filterSelect && filterSelect.options.length > 0) {
         filterSelect.options[0].text = t.filterAll; 
     }
+} // <-- Fechamento da função applyLanguage adicionado aqui!
 
 function changeLanguage(lang) {
     localStorage.setItem('preferredLang', lang);
@@ -499,7 +502,6 @@ function closeDeleteConfirm(confirmed) {
     pendingDeleteIndex = null;
 }
 
-// ABERTURA DE ACORDO COM AS NOVAS DIRETRIZES GLOBAIS DE TELA
 function openAllTabs(onlyAuto = false) {
     let linksParaAbrir = [];
 
@@ -531,12 +533,10 @@ function openAllTabs(onlyAuto = false) {
     });
 }
 
-// ASSISTENTE DE DETECÇÃO PARA PÁGINA INICIAL
 function showHomepageGuide() {
     const browser = getBrowserName();
     const currentUrl = window.location.href;
     
-    // Copia o link atual automaticamente para poupar o usuário
     navigator.clipboard.writeText(currentUrl).then(() => {
         const t = translations[currentLang];
         let infoMsg = t.guideTitle.replace('{browser}', browser) + t.guideDDG;
@@ -593,7 +593,6 @@ function selectInitialLang(lang) {
     }
 }
 
-
 document.getElementById('btnStartAdd').addEventListener('click', openConfigModalFlow);
 document.getElementById('urlInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') openConfigModalFlow();
@@ -615,11 +614,10 @@ document.getElementById('globalAutoOpen').addEventListener('change', function() 
     localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
 });
 
-// Listener do novo Dropdown global de Modo de Abertura
 document.getElementById('globalOpenMode').addEventListener('change', function() {
     globalOpenMode = this.value;
     localStorage.setItem('globalOpenMode', globalOpenMode);
-    renderList(); // Atualiza os ícones internos da lista dinamicamente
+    renderList();
 });
 
 document.getElementById('linksList').addEventListener('click', (e) => {
