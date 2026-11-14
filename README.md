@@ -5,9 +5,17 @@
 ![GitHub Stars](https://img.shields.io/github/stars/Tiyuyyh/dashboard-inicial?style=flat-square&color=yellow)
 ![Sem servidor](https://img.shields.io/badge/Sem%20servidor-100%25%20local-blue?style=flat-square)
 
-> Seus favoritos em qualquer navegador. Sem instalação, sem conta, sem rastreamento.
+> 🇧🇷 Seus favoritos em qualquer navegador. Sem instalação, sem conta, sem rastreamento.
+> 
+> 🇺🇸 Your bookmarks, anywhere. No install, no account, no tracking.
+> 
+> 🇪🇸 Tus favoritos en cualquier navegador. Sin instalación, sin cuenta, sin rastreo.
 
 Feito especialmente para funcionar no **DuckDuckGo Browser** (que não aceita extensões) — mas roda em qualquer navegador com um arquivo HTML.
+
+Built to work on **DuckDuckGo Browser** (which doesn't support extensions) — but runs on any browser from a single HTML file.
+
+Hecho para funcionar en **DuckDuckGo Browser** (que no acepta extensiones) — pero funciona en cualquier navegador desde un archivo HTML.
 
 ---
 
