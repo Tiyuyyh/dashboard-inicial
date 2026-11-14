@@ -16,6 +16,7 @@ const translations = {
         placeholderDesc: 'Descrição (Opcional)',
         filterAll: 'Todas as Categorias',
         filterNone: 'Sem Categoria',
+        searchPlaceholder: '🔍 Buscar...',
         subtitle: 'Gerenciador de Abas de Inicialização',
         lblGlobal: 'Executar abertura automática ao iniciar a página',
         lblGlobalMode: '📋 Modo de abertura:',
@@ -62,6 +63,7 @@ const translations = {
         placeholderDesc: 'Description (Optional)',
         filterAll: 'All Categories',
         filterNone: 'No Category',
+        searchPlaceholder: '🔍 Search...',
         subtitle: 'Startup Tab Manager',
         lblGlobal: 'Run automatic opening when launching the page',
         lblGlobalMode: '📋 Default opening mode:',
@@ -108,6 +110,7 @@ const translations = {
         placeholderDesc: 'Descripción (Opcional)',
         filterAll: 'Todas las Categorías',
         filterNone: 'Sin Categoría',
+        searchPlaceholder: '🔍 Buscar...',
         subtitle: 'Gestor de Pestañas de Inicio',
         lblGlobal: 'Ejecutar apertura automática al iniciar a la página',
         lblGlobalMode: '📋 Modo de apertura por defecto:',
@@ -146,6 +149,8 @@ let currentLang = localStorage.getItem('preferredLang');
 let pendingDeleteIndex = null;
 let tempUrlData = null;
 let isCustomCategoryActive = false;
+let currentSearch = '';
+let currentCategoryFilter = 'all';
 
 let alertsState = JSON.parse(localStorage.getItem('alertsState')) || { popupAlert: true, storageAlert: true };
 
@@ -230,11 +235,12 @@ function applyLanguage(lang) {
     const catInputCustom = document.getElementById('catInputCustom');
     if (catInputCustom) catInputCustom.placeholder = t.catInputCustom;
 
-    const filterSelect = document.getElementById('categoryFilter');
-    if (filterSelect && filterSelect.options.length > 0) {
-        filterSelect.options[0].text = t.filterAll; 
-    }
-} // <-- Fechamento da função applyLanguage adicionado aqui!
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.placeholder = t.searchPlaceholder;
+
+    // Reaplica filtro de categorias com novo idioma
+    updateCategoryFilter();
+} // <-- Fechamento da função applyLanguage
 
 function changeLanguage(lang) {
     localStorage.setItem('preferredLang', lang);
@@ -419,13 +425,66 @@ function cleanUrlName(urlText) {
     }
 }
 
+function updateCategoryFilter() {
+    const select = document.getElementById('categoryFilter');
+    const t = translations[currentLang];
+    const current = select.value;
+
+    // Coleta categorias únicas
+    const cats = [...new Set(pages.map(p => p.category).filter(Boolean))].sort();
+
+    select.innerHTML = `<option value="all">${t.filterAll}</option>`;
+    if (pages.some(p => !p.category)) {
+        select.innerHTML += `<option value="none">${t.filterNone}</option>`;
+    }
+    cats.forEach(cat => {
+        select.innerHTML += `<option value="${cat}">${cat}</option>`;
+    });
+
+    // Reaplica seleção anterior se ainda existir
+    if ([...select.options].some(o => o.value === current)) select.value = current;
+    else select.value = 'all';
+}
+
+function getFilteredPages() {
+    const query = currentSearch.toLowerCase().trim();
+    return pages
+        .map((page, index) => ({ page, index }))
+        .filter(({ page }) => {
+            const matchSearch = !query ||
+                page.name.toLowerCase().includes(query) ||
+                page.url.toLowerCase().includes(query) ||
+                (page.description || '').toLowerCase().includes(query);
+
+            const matchCat =
+                currentCategoryFilter === 'all' ||
+                (currentCategoryFilter === 'none' && !page.category) ||
+                page.category === currentCategoryFilter;
+
+            return matchSearch && matchCat;
+        });
+}
+
 function renderList() {
     const listElement = document.getElementById('linksList');
     listElement.innerHTML = '';
-    
-    pages.sort((a, b) => a.name.localeCompare(b.name));
 
-    pages.forEach((page, index) => {
+    pages.sort((a, b) => a.name.localeCompare(b.name));
+    updateCategoryFilter();
+
+    // Oculta barra de filtro se não há links
+    const filterBar = document.getElementById('filterBar');
+    if (filterBar) filterBar.classList.toggle('hidden', pages.length === 0);
+
+    const filtered = getFilteredPages();
+
+    if (filtered.length === 0 && pages.length > 0) {
+        listElement.innerHTML = `<div class="filter-no-results">Nenhum link encontrado.</div>`;
+        localStorage.setItem('customTabs', JSON.stringify(pages));
+        return;
+    }
+
+    filtered.forEach(({ page, index }) => {
         const li = document.createElement('li');
         let catHtml = page.category ? `<span class="item-cat">${page.category}</span>` : '';
         let descHtml = page.description ? `<span class="item-desc">${page.description}</span>` : '';
@@ -674,6 +733,16 @@ document.getElementById('linksList').addEventListener('click', (e) => {
 
 document.getElementsByName('langRadio').forEach(radio => {
     radio.addEventListener('change', (e) => changeLanguage(e.target.value));
+});
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    currentSearch = e.target.value;
+    renderList();
+});
+
+document.getElementById('categoryFilter').addEventListener('change', (e) => {
+    currentCategoryFilter = e.target.value;
+    renderList();
 });
 
 function tocarSomMK() {
