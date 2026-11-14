@@ -13,6 +13,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Inicial - Tiyuyyh v1.0.0</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#de5833">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Favorito">
+    <link rel="apple-touch-icon" href="img/icone.png">
 </head>
 <body>
     
@@ -188,5 +196,13 @@
 </footer>
 
 <script src="js/script.js" defer></script>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .catch(() => { /* falha silenciosa — não bloqueia o app */ });
+        });
+    }
+</script>
 </body>
 </html>

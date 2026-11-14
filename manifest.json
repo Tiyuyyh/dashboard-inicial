@@ -1,0 +1,26 @@
+{
+    "name": "Dashboard Inicial — Favorito Portátil",
+    "short_name": "Favorito",
+    "description": "Seus favoritos em qualquer navegador. Sem instalação, sem conta, sem rastreamento.",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#1c1c1e",
+    "theme_color": "#de5833",
+    "lang": "pt-BR",
+    "icons": [
+        {
+            "src": "img/icone.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "img/icone.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["productivity", "utilities"]
+}
