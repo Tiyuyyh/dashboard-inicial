@@ -313,10 +313,51 @@ function formatBytes(bytes) {
     return (bytes / 1024).toFixed(2) + ' KB';
 }
 
-function exportBackup() {
+// ── Crypto helpers (AES-GCM 256-bit via Web Crypto API) ──────────────────────
+const CRYPTO_PASSPHRASE = 'TIYU_DASH_v1_SECURE';
+
+async function _deriveKey() {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+        'raw', enc.encode(CRYPTO_PASSPHRASE), 'PBKDF2', false, ['deriveKey']
+    );
+    return crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: enc.encode('tiyuyyh-salt'), iterations: 100000, hash: 'SHA-256' },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+    );
+}
+
+async function encryptData(plainText) {
+    const key = await _deriveKey();
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encoded = new TextEncoder().encode(plainText);
+    const cipher = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoded);
+    const ivHex = Array.from(iv).map(b => b.toString(16).padStart(2, '0')).join('');
+    const dataHex = Array.from(new Uint8Array(cipher)).map(b => b.toString(16).padStart(2, '0')).join('');
+    return 'TIYU_ENC:' + ivHex + ':' + dataHex;
+}
+
+async function decryptData(payload) {
+    // Retrocompatibilidade: backups antigos em base64
+    if (!payload.startsWith('TIYU_ENC:')) {
+        return decodeURIComponent(escape(atob(payload.trim())));
+    }
+    const parts = payload.split(':');
+    const iv = new Uint8Array(parts[1].match(/.{2}/g).map(h => parseInt(h, 16)));
+    const data = new Uint8Array(parts[2].match(/.{2}/g).map(h => parseInt(h, 16)));
+    const key = await _deriveKey();
+    const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
+    return new TextDecoder().decode(decrypted);
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function exportBackup() {
     const packageData = { signature: "TIYU_DASH_BKP", globalAutoOpen, globalOpenMode, customTabs: pages };
     const rawJson = JSON.stringify(packageData);
-    const encryptedData = btoa(unescape(encodeURIComponent(rawJson)));
+    const encryptedData = await encryptData(rawJson);
     const blob = new Blob([encryptedData], { type: 'text/plain' });
     const fileName = generateFileName();
 
@@ -341,19 +382,19 @@ function importBackup(input) {
 
     const reader = new FileReader();
     reader.onload = function(e) {
-        runBackupAnimation(translations[currentLang].statusImport, file.name, formatBytes(file.size), () => {
+        runBackupAnimation(translations[currentLang].statusImport, file.name, formatBytes(file.size), async () => {
             try {
-                const decryptedJson = decodeURIComponent(escape(atob(e.target.result.trim())));
+                const decryptedJson = await decryptData(e.target.result.trim());
                 const importedObj = JSON.parse(decryptedJson);
                 if (importedObj.signature !== "TIYU_DASH_BKP") throw new Error();
 
                 globalAutoOpen = importedObj.globalAutoOpen ?? false;
                 globalOpenMode = importedObj.globalOpenMode || 'tab';
                 pages = importedObj.customTabs || [];
-                
+
                 document.getElementById('globalAutoOpen').checked = globalAutoOpen;
                 document.getElementById('globalOpenMode').value = globalOpenMode;
-                
+
                 localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
                 localStorage.setItem('globalOpenMode', globalOpenMode);
                 renderList();
@@ -599,7 +640,7 @@ document.getElementById('urlInput').addEventListener('keypress', (e) => {
 });
 
 document.getElementById('btnForceOpen').addEventListener('click', () => openAllTabs(false));
-document.getElementById('btnDownloadBkp').addEventListener('click', exportBackup);
+document.getElementById('btnDownloadBkp').addEventListener('click', () => exportBackup());
 document.getElementById('btnUploadBkp').addEventListener('click', () => document.getElementById('fileImporter').click());
 document.getElementById('fileImporter').addEventListener('change', function() { importBackup(this); });
 document.getElementById('btnClosePopup').addEventListener('click', () => minimizeAlert('popupAlert'));
