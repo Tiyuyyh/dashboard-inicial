@@ -190,6 +190,31 @@ const translations = {
     }
 };
 
+// ── Sanitização de URL (bloqueia javascript:, data:, vbscript:) ───────────────
+function sanitizeUrl(url) {
+    if (!url || typeof url !== 'string') return '#';
+    const trimmed = url.trim().toLowerCase();
+    if (trimmed.startsWith('javascript:') || trimmed.startsWith('data:') || trimmed.startsWith('vbscript:')) return '#';
+    return url.trim();
+}
+
+// ── Sanitização de texto simples (remove tags HTML) ───────────────────────────
+function sanitizeText(text) {
+    if (!text || typeof text !== 'string') return '';
+    return text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ── Validação de página importada ─────────────────────────────────────────────
+function sanitizePage(page) {
+    return {
+        ...page,
+        url: sanitizeUrl(page.url),
+        name: sanitizeText(page.name || ''),
+        category: sanitizeText(page.category || ''),
+        description: sanitizeText(page.description || '')
+    };
+}
+
 let pages = JSON.parse(localStorage.getItem('customTabs')) || [];
 let globalAutoOpen = JSON.parse(localStorage.getItem('globalAutoOpen')) ?? false;
 let globalOpenMode = localStorage.getItem('globalOpenMode') || 'tab';
@@ -253,7 +278,7 @@ function applyLanguage(lang) {
     document.getElementById('txtStorageAlert').innerText = t.storageText;
 
     if (pendingDeleteIndex !== null && pages[pendingDeleteIndex]) {
-        document.getElementById('txtDeleteConfirm').innerHTML = t.confirmDelete.replace('{name}', pages[pendingDeleteIndex].name);
+        document.getElementById('txtDeleteConfirm').textContent = t.confirmDelete.replace('{name}', pages[pendingDeleteIndex].name);
         document.getElementById('btnDeleteYes').innerText = t.btnYes;
         document.getElementById('btnDeleteNo').innerText = t.btnNo;
     }
@@ -459,7 +484,7 @@ function importBackup(input) {
 
                 globalAutoOpen = importedObj.globalAutoOpen ?? false;
                 globalOpenMode = importedObj.globalOpenMode || 'tab';
-                pages = importedObj.customTabs || [];
+                pages = (importedObj.customTabs || []).map(sanitizePage);
 
                 document.getElementById('globalAutoOpen').checked = globalAutoOpen;
                 document.getElementById('globalOpenMode').value = globalOpenMode;
@@ -501,7 +526,10 @@ function updateCategoryFilter() {
         select.innerHTML += `<option value="none">${t.filterNone}</option>`;
     }
     cats.forEach(cat => {
-        select.innerHTML += `<option value="${cat}">${cat}</option>`;
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
     });
 
     // Reaplica seleção anterior se ainda existir
@@ -552,20 +580,20 @@ function renderList() {
         li.setAttribute('draggable', 'true');
         li.dataset.realIndex = index;
 
-        let catHtml = page.category ? `<span class="item-cat">${page.category}</span>` : '';
-        let descHtml = page.description ? `<span class="item-desc">${page.description}</span>` : '';
         let iconType = globalOpenMode === 'window' ? '🪟' : '📑';
+        const safeUrl = sanitizeUrl(page.url);
 
+        // Monta estrutura via DOM (evita XSS em url/name/category/description)
         li.innerHTML = `
             <span class="drag-handle" title="Arrastar">⠿</span>
             <div class="li-left">
                 <input type="checkbox" ${page.autoOpen ? 'checked' : ''} data-index="${index}" class="chk-item">
                 <div class="li-info">
                     <div class="item-header">
-                        <a href="${page.url}" target="_blank" class="item-name">${page.name}</a>
-                        ${catHtml}
+                        <a href="" target="_blank" rel="noopener noreferrer" class="item-name"></a>
+                        ${page.category ? '<span class="item-cat"></span>' : ''}
                     </div>
-                    ${descHtml}
+                    ${page.description ? '<span class="item-desc"></span>' : ''}
                 </div>
                 <span class="badge-type" title="Diretriz Global de Tela">${iconType}</span>
             </div>
@@ -574,6 +602,12 @@ function renderList() {
                 <button class="btn-remove" data-index="${index}">−</button>
             </div>
         `;
+        // Atribui dados do usuário via propriedades seguras (sem injeção HTML)
+        const anchor = li.querySelector('.item-name');
+        anchor.href = safeUrl;
+        anchor.textContent = page.name || safeUrl;
+        if (page.category) li.querySelector('.item-cat').textContent = page.category;
+        if (page.description) li.querySelector('.item-desc').textContent = page.description;
 
         // Drag & drop handlers
         li.addEventListener('dragstart', (e) => {
@@ -766,7 +800,7 @@ function closeEditModal() {
 
 function removePage(index) {
     pendingDeleteIndex = index;
-    document.getElementById('txtDeleteConfirm').innerHTML = translations[currentLang].confirmDelete.replace('{name}', pages[index].name);
+    document.getElementById('txtDeleteConfirm').textContent = translations[currentLang].confirmDelete.replace('{name}', pages[index].name);
     document.getElementById('deleteConfirmAlert').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -956,7 +990,7 @@ async function restoreFromCode() {
 
         globalAutoOpen = obj.globalAutoOpen ?? false;
         globalOpenMode = obj.globalOpenMode || 'tab';
-        pages = obj.customTabs || [];
+        pages = (obj.customTabs || []).map(sanitizePage);
 
         document.getElementById('globalAutoOpen').checked = globalAutoOpen;
         document.getElementById('globalOpenMode').value = globalOpenMode;
@@ -1004,9 +1038,11 @@ function parseBookmarksHtml(htmlText) {
                     const name = h3.innerText.trim().toUpperCase().substring(0, 13);
                     walkNode(dl, name || folderName);
                 } else if (a) {
-                    const url = a.getAttribute('HREF') || '';
-                    const name = a.innerText.trim();
-                    if (url.startsWith('http') && name) {
+                    const rawUrl = a.getAttribute('HREF') || '';
+                    const rawName = a.innerText.trim();
+                    const url = sanitizeUrl(rawUrl);
+                    const name = sanitizeText(rawName);
+                    if (url !== '#' && url.startsWith('http') && name) {
                         results.push({ url, name, folder: folderName });
                     }
                 }
