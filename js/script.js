@@ -530,6 +530,7 @@ function importBackup(input) {
 
                         document.getElementById('globalAutoOpen').checked = globalAutoOpen;
                         document.getElementById('globalOpenMode').value = globalOpenMode;
+                        document.getElementById('modeSelectGroup').style.display = globalAutoOpen ? 'flex' : 'none';
 
                         localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
                         localStorage.setItem('globalOpenMode', globalOpenMode);
@@ -903,9 +904,31 @@ function showHomepageGuide() {
     });
 }
 
+// ── Som sintético de energia (Web Audio API) ──────────────────────────────────
+function playToggleOnSound() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.35);
+    } catch (_) { /* navegador sem suporte — silencioso */ }
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('preferredLang');
     document.getElementById('globalOpenMode').value = globalOpenMode;
+
+    // Estado inicial do select de modo e about panel
+    document.getElementById('modeSelectGroup').style.display = globalAutoOpen ? 'flex' : 'none';
     
     if (!savedLang) {
         document.getElementById('langStartModal').style.display = 'flex';
@@ -967,10 +990,16 @@ document.getElementById('btnTrustYes').addEventListener('click', () => closeTrus
 document.getElementById('btnTrustNo').addEventListener('click', () => closeTrustConfirm(false));
 document.getElementById('btnDeleteNo').addEventListener('click', () => closeDeleteConfirm(false));
 document.getElementById('btnSetHomepage').addEventListener('click', showHomepageGuide);
+document.getElementById('btnAboutToggle').addEventListener('click', () => {
+    const panel = document.getElementById('aboutPanel');
+    panel.classList.toggle('hidden-element');
+});
 
 document.getElementById('globalAutoOpen').addEventListener('change', function() {
     globalAutoOpen = this.checked;
     localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
+    document.getElementById('modeSelectGroup').style.display = globalAutoOpen ? 'flex' : 'none';
+    if (globalAutoOpen) playToggleOnSound();
 });
 
 document.getElementById('globalOpenMode').addEventListener('change', function() {
@@ -1045,6 +1074,7 @@ function restoreFromCode() {
 
             document.getElementById('globalAutoOpen').checked = globalAutoOpen;
             document.getElementById('globalOpenMode').value = globalOpenMode;
+            document.getElementById('modeSelectGroup').style.display = globalAutoOpen ? 'flex' : 'none';
             localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
             localStorage.setItem('globalOpenMode', globalOpenMode);
 

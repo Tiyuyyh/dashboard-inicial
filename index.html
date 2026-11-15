@@ -120,8 +120,7 @@
 <div class="container">
     <header class="header-container">
         <div class="header-text">
-            <h1 id="txtTitle">🚀 Inicial Rápida</h1>
-            <p id="txtSubtitle">Gerenciador de Abas de Inicialização</p>
+            <h1 id="txtTitle">🚀 Inicial Rápida <button class="btn-info-toggle" id="btnAboutToggle" title="O que é isso?">ℹ️</button></h1>
         </div>
         
         <div class="icon-wrapper">
@@ -135,25 +134,27 @@
     </header>
 
     <div class="explanation-box" id="mainContainer">
-        <h3 id="txtAboutTitle">🌐 O que é isso?</h3>
-        <p id="txtAboutDesc">Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.</p>
 
-        <!-- DIRETRIZES DE CONFIGURAÇÃO DO PAINEL -->
-        <div class="config-group">
-            <input type="checkbox" id="globalAutoOpen">
-            <label id="lblGlobal" for="globalAutoOpen">Executar abertura automática ao iniciar a página</label>
+        <!-- PAINEL DE EXPLICAÇÃO (recolhível) -->
+        <div id="aboutPanel" class="about-panel hidden-element">
+            <p id="txtAboutDesc">Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.</p>
         </div>
-        
-        <div class="config-group-select">
-            <label id="lblGlobalMode" for="globalOpenMode">📋 Modo de abertura padrão:</label>
+
+        <!-- CONFIGURAÇÕES COMPACTAS -->
+        <div class="config-row">
+            <span id="lblGlobal" class="config-label">⚡ Abertura automática</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="globalAutoOpen">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="config-group-select" id="modeSelectGroup" style="display:none;">
+            <label id="lblGlobalMode" for="globalOpenMode">📋 Modo:</label>
             <select id="globalOpenMode">
-                <option value="tab">📑 Abrir tudo como Abas</option>
-                <option value="window">🪟 Abrir tudo como Janelas (App)</option>
+                <option value="tab">📑 Abas</option>
+                <option value="window">🪟 Janelas</option>
             </select>
-        </div>
-        
-        <div class="config-help" id="txtHelpGlobal">
-            Se não gostar ou não quiser que as abas abram sozinhas, basta desmarcar a opção acima.
         </div>
 
         <div class="input-section-simple">

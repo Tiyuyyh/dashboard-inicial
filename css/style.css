@@ -11,7 +11,25 @@ body {
     min-height: 100vh;
     box-sizing: border-box;
 }
-h1 { color: #de5833; margin-bottom: 5px; }
+h1 { color: #de5833; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+
+/* Botão ℹ️ de info no título */
+.btn-info-toggle { background: none; border: 1px solid #48484a; border-radius: 50%; width: 26px; height: 26px; font-size: 13px; cursor: pointer; color: #8e8e93; padding: 0; line-height: 1; flex-shrink: 0; }
+.btn-info-toggle:hover { border-color: #de5833; color: #de5833; }
+
+/* Painel de explicação recolhível */
+.about-panel { background: #2c2c2e; border-left: 3px solid #de5833; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px; color: #aeaea2; line-height: 1.5; }
+.about-panel p { margin: 0; }
+
+/* Toggle switch */
+.config-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.config-label { font-size: 13px; color: #f2f2f7; }
+.toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background-color: #48484a; border-radius: 24px; transition: background 0.25s; }
+.toggle-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform 0.25s; }
+.toggle-switch input:checked + .toggle-slider { background-color: #de5833; }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
 
 .alerts-container {
     width: 100%;
