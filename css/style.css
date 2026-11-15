@@ -327,6 +327,20 @@ li {
     transition: background 0.15s;
 }
 li:hover { background: #404042; }
+.drag-handle {
+    color: #727276;
+    font-size: 18px;
+    cursor: grab;
+    flex-shrink: 0;
+    padding: 0 4px;
+    user-select: none;
+}
+.drag-handle:active { cursor: grabbing; }
+li.dragging { opacity: 0.4; }
+li.drag-over { border-left-color: #30d158; background: #2a3a2e; }
+.item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.btn-edit { background: #3a3a3c; color: #64d2ff; padding: 6px 10px; font-size: 13px; border-radius: 6px; border: 1px solid #48484a; cursor: pointer; }
+.btn-edit:hover { background: #48484a; }
 .li-left { display: flex; align-items: center; gap: 12px; width: 100%; overflow: hidden; }
 .li-info { display: flex; flex-direction: column; overflow: hidden; width: 100%; }
 .item-header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -384,4 +398,5 @@ li:hover { background: #404042; }
     
     /* ESCONDE O BOTÃO DE ATALHO DE PÁGINA INICIAL NO CELULAR */
     .homepage-shortcut-btn { display: none !important; }
+    .drag-handle { display: none; }
 }

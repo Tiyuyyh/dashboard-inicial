@@ -11,6 +11,9 @@ const translations = {
         btnModalNo: 'NÃO',
         btnModalYes: 'SIM',
         btnModalSaveFinal: 'SALVAR',
+        modalEditTitle: '✏️ Editar Link',
+        modalEditUrlLabel: 'URL',
+        modalEditNameLabel: 'Nome exibido',
         btnAddItem: 'Adicionar',
         placeholderCat: 'Categoria (Opcional)',
         placeholderDesc: 'Descrição (Opcional)',
@@ -63,6 +66,9 @@ const translations = {
         btnModalNo: 'NO',
         btnModalYes: 'YES',
         btnModalSaveFinal: 'SAVE',
+        modalEditTitle: '✏️ Edit Link',
+        modalEditUrlLabel: 'URL',
+        modalEditNameLabel: 'Display name',
         btnAddItem: 'Add',
         placeholderCat: 'Category (Optional)',
         placeholderDesc: 'Description (Optional)',
@@ -115,6 +121,9 @@ const translations = {
         btnModalNo: 'NO',
         btnModalYes: 'SÍ',
         btnModalSaveFinal: 'GUARDAR',
+        modalEditTitle: '✏️ Editar Enlace',
+        modalEditUrlLabel: 'URL',
+        modalEditNameLabel: 'Nombre mostrado',
         btnAddItem: 'Añadir',
         placeholderCat: 'Categoría (Opcional)',
         placeholderDesc: 'Descripción (Opcional)',
@@ -166,6 +175,7 @@ let tempUrlData = null;
 let isCustomCategoryActive = false;
 let currentSearch = '';
 let currentCategoryFilter = 'all';
+let dragSrcIndex = null;
 
 let alertsState = JSON.parse(localStorage.getItem('alertsState')) || { popupAlert: true, storageAlert: true };
 
@@ -504,11 +514,15 @@ function renderList() {
 
     filtered.forEach(({ page, index }) => {
         const li = document.createElement('li');
+        li.setAttribute('draggable', 'true');
+        li.dataset.realIndex = index;
+
         let catHtml = page.category ? `<span class="item-cat">${page.category}</span>` : '';
         let descHtml = page.description ? `<span class="item-desc">${page.description}</span>` : '';
         let iconType = globalOpenMode === 'window' ? '🪟' : '📑';
 
         li.innerHTML = `
+            <span class="drag-handle" title="Arrastar">⠿</span>
             <div class="li-left">
                 <input type="checkbox" ${page.autoOpen ? 'checked' : ''} data-index="${index}" class="chk-item">
                 <div class="li-info">
@@ -520,8 +534,37 @@ function renderList() {
                 </div>
                 <span class="badge-type" title="Diretriz Global de Tela">${iconType}</span>
             </div>
-            <button class="btn-remove" data-index="${index}">-</button>
+            <div class="item-actions">
+                <button class="btn-edit" data-index="${index}" title="Editar">✏️</button>
+                <button class="btn-remove" data-index="${index}">−</button>
+            </div>
         `;
+
+        // Drag & drop handlers
+        li.addEventListener('dragstart', (e) => {
+            dragSrcIndex = parseInt(li.dataset.realIndex);
+            e.dataTransfer.effectAllowed = 'move';
+            li.classList.add('dragging');
+        });
+        li.addEventListener('dragend', () => li.classList.remove('dragging'));
+        li.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            li.classList.add('drag-over');
+        });
+        li.addEventListener('dragleave', () => li.classList.remove('drag-over'));
+        li.addEventListener('drop', (e) => {
+            e.preventDefault();
+            li.classList.remove('drag-over');
+            const targetIndex = parseInt(li.dataset.realIndex);
+            if (dragSrcIndex === null || dragSrcIndex === targetIndex) return;
+            // Reordena o array
+            const moved = pages.splice(dragSrcIndex, 1)[0];
+            pages.splice(targetIndex, 0, moved);
+            dragSrcIndex = null;
+            renderList();
+        });
+
         listElement.appendChild(li);
     });
     localStorage.setItem('customTabs', JSON.stringify(pages));
@@ -548,6 +591,11 @@ function closeConfigModalFlow() {
     document.getElementById('linkConfigModal').classList.remove('active');
     document.getElementById('urlInput').value = '';
     tempUrlData = null;
+    editingIndex = null;
+    document.getElementById('editUrlGroup').classList.add('hidden-element');
+    document.getElementById('editNameGroup').classList.add('hidden-element');
+    document.getElementById('modalTitle').innerText = translations[currentLang]?.modalTitle || '📋';
+    document.getElementById('modalQuestion').classList.remove('hidden-element');
 }
 
 function resetCategoryToggle() {
@@ -559,6 +607,7 @@ function resetCategoryToggle() {
 }
 
 document.getElementById('btnModalNo').addEventListener('click', () => {
+    if (editingIndex !== null) { closeEditModal(); return; }
     if (!tempUrlData) return;
     pages.push({ ...tempUrlData, category: '', description: '' });
     renderList();
@@ -586,23 +635,99 @@ document.getElementById('btnEditCategory').addEventListener('click', () => {
 });
 
 document.getElementById('btnModalSaveFinal').addEventListener('click', () => {
-    if (!tempUrlData) return;
-    
-    let finalCategory = isCustomCategoryActive ? 
-        document.getElementById('catInputCustom').value.trim().toUpperCase() : 
+    let finalCategory = isCustomCategoryActive ?
+        document.getElementById('catInputCustom').value.trim().toUpperCase() :
         document.getElementById('catSelect').value;
-    
     const finalDesc = document.getElementById('descInput').value.trim();
 
-    pages.push({
-        ...tempUrlData,
-        category: finalCategory.substring(0, 13),
-        description: finalDesc.substring(0, 25)
-    });
-
-    renderList();
-    closeConfigModalFlow();
+    if (editingIndex !== null) {
+        // Modo edição
+        const newUrl = document.getElementById('editUrlInput').value.trim();
+        const newName = document.getElementById('editNameInput').value.trim();
+        if (!newUrl) return;
+        let formattedUrl = newUrl;
+        if (!/^https?:\/\//i.test(formattedUrl)) formattedUrl = 'https://' + formattedUrl;
+        pages[editingIndex] = {
+            ...pages[editingIndex],
+            url: formattedUrl,
+            name: newName || pages[editingIndex].name,
+            category: finalCategory.substring(0, 13),
+            description: finalDesc.substring(0, 25)
+        };
+        renderList();
+        closeEditModal();
+    } else {
+        // Modo adição
+        if (!tempUrlData) return;
+        pages.push({
+            ...tempUrlData,
+            category: finalCategory.substring(0, 13),
+            description: finalDesc.substring(0, 25)
+        });
+        renderList();
+        closeConfigModalFlow();
+    }
 });
+
+let editingIndex = null;
+
+function openEditModal(index) {
+    const page = pages[index];
+    if (!page) return;
+    const t = translations[currentLang];
+
+    editingIndex = index;
+    tempUrlData = null; // não é adição, é edição
+
+    // Título e pergunta
+    document.getElementById('modalTitle').innerText = t.modalEditTitle;
+    document.getElementById('modalQuestion').classList.add('hidden-element');
+
+    // Mostra campos de URL e nome
+    document.getElementById('editUrlGroup').classList.remove('hidden-element');
+    document.getElementById('editNameGroup').classList.remove('hidden-element');
+    document.getElementById('lblEditUrl').innerText = t.modalEditUrlLabel;
+    document.getElementById('lblEditName').innerText = t.modalEditNameLabel;
+    document.getElementById('editUrlInput').value = page.url;
+    document.getElementById('editNameInput').value = page.name;
+
+    // Pula direto para os campos (sem SIM/NÃO)
+    document.getElementById('modalFieldsData').classList.add('expanded');
+    document.getElementById('btnModalNo').classList.add('hidden-element');
+    document.getElementById('btnModalYes').classList.add('hidden-element');
+    document.getElementById('btnModalSaveFinal').classList.remove('hidden-element');
+
+    // Preenche categoria e descrição atuais
+    const catVal = page.category || '';
+    const catSelect = document.getElementById('catSelect');
+    const optExists = [...catSelect.options].some(o => o.value === catVal);
+    if (optExists) {
+        catSelect.value = catVal;
+        isCustomCategoryActive = false;
+        catSelect.classList.remove('hidden-element');
+        document.getElementById('catInputCustom').classList.add('hidden-element');
+    } else if (catVal) {
+        isCustomCategoryActive = true;
+        catSelect.classList.add('hidden-element');
+        const ci = document.getElementById('catInputCustom');
+        ci.classList.remove('hidden-element');
+        ci.value = catVal;
+    } else {
+        resetCategoryToggle();
+    }
+    document.getElementById('descInput').value = page.description || '';
+
+    document.getElementById('linkConfigModal').classList.add('active');
+}
+
+function closeEditModal() {
+    editingIndex = null;
+    document.getElementById('editUrlGroup').classList.add('hidden-element');
+    document.getElementById('editNameGroup').classList.add('hidden-element');
+    closeConfigModalFlow();
+    // Restaura título padrão
+    document.getElementById('modalTitle').innerText = translations[currentLang].modalTitle;
+}
 
 function removePage(index) {
     pendingDeleteIndex = index;
@@ -742,6 +867,7 @@ document.getElementById('linksList').addEventListener('click', (e) => {
     const idx = e.target.getAttribute('data-index');
     if (idx !== null) {
         if (e.target.classList.contains('btn-remove')) removePage(parseInt(idx));
+        if (e.target.classList.contains('btn-edit')) openEditModal(parseInt(idx));
         if (e.target.classList.contains('chk-item')) {
             pages[idx].autoOpen = e.target.checked;
             localStorage.setItem('customTabs', JSON.stringify(pages));

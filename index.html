@@ -181,6 +181,15 @@
         <p id="modalQuestion">Deseja classificar este link com categoria e descrição?</p>
         
         <div id="modalFieldsData" class="modal-fields-hidden">
+            <div id="editUrlGroup" class="hidden-element">
+                <label id="lblEditUrl" style="font-size:12px;color:#a2a2a7;margin-bottom:4px;display:block;">URL</label>
+                <input type="text" id="editUrlInput" placeholder="https://..." style="width:100%;box-sizing:border-box;">
+            </div>
+            <div id="editNameGroup" class="hidden-element">
+                <label id="lblEditName" style="font-size:12px;color:#a2a2a7;margin-bottom:4px;display:block;">Nome exibido</label>
+                <input type="text" id="editNameInput" placeholder="Nome" maxlength="30" style="width:100%;box-sizing:border-box;">
+            </div>
+
             <div class="category-row-setup">
                 <select id="catSelect">
                     <option value="FERRAMENTAS">FERRAMENTAS</option>
@@ -191,7 +200,7 @@
                 <input type="text" id="catInputCustom" class="hidden-element" placeholder="NOVA CATEGORIA" maxlength="13">
                 <button id="btnEditCategory" class="btn-edit-action">✏️ Editar</button>
             </div>
-            
+
             <input type="text" id="descInput" placeholder="Breve descrição do link (máx 25)" maxlength="25">
         </div>
 
