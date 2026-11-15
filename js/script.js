@@ -37,6 +37,11 @@ const translations = {
         statusImport: 'Validando e Extraindo Dados...',
         errInvalidFile: '❌ Arquivo de backup inválido ou corrompido!',
         backupWarning: '🚨 SEGURO MORREU DE VELHO: Baixe seu backup! Esse arquivo é de sua total responsabilidade. Nós não temos acesso a nada. Se você perder o arquivo e limpar o navegador... já era, meu consagrado! Nem o TI da Nasa recupera.',
+        btnImportBrowser: 'Importar Favoritos 🌐',
+        importBrowserTitle: '🌐 Importar Favoritos do Navegador',
+        importBrowserHint: 'Como exportar:\nChrome: Menu → Favoritos → Gerenciar favoritos → ⋮ → Exportar\nFirefox: Menu → Favoritos → Gerenciar favoritos → Importar e fazer backup → Exportar\nEdge: Menu → Favoritos → ⋮ → Exportar favoritos',
+        importBrowserSuccess: '✅ {added} link(s) importado(s)! {skipped} duplicata(s) ignorada(s).',
+        importBrowserEmpty: '⚠️ Nenhum link válido encontrado no arquivo.',
         confirmDelete: 'Você tem certeza absoluta que deseja remover o link para <strong>{name}</strong>?',
         btnYes: 'SIM 👍',
         btnNo: 'NÃO 🛑',
@@ -84,6 +89,11 @@ const translations = {
         statusImport: 'Validating and Extracting Data...',
         errInvalidFile: '❌ Invalid or corrupted backup file!',
         backupWarning: '🚨 PROTECT YOUR GOODS: Download your backup! This file is 100% your responsibility. We don\'t have a server, we don\'t track you. If you lose this file and wipe your browser, it\'s gone to the shadow realm. No cloud, no mercy!',
+        btnImportBrowser: 'Import Bookmarks 🌐',
+        importBrowserTitle: '🌐 Import Browser Bookmarks',
+        importBrowserHint: 'How to export:\nChrome: Menu → Bookmarks → Bookmark manager → ⋮ → Export\nFirefox: Menu → Bookmarks → Manage bookmarks → Import and Backup → Export\nEdge: Menu → Favorites → ⋮ → Export favorites',
+        importBrowserSuccess: '✅ {added} link(s) imported! {skipped} duplicate(s) skipped.',
+        importBrowserEmpty: '⚠️ No valid links found in the file.',
         confirmDelete: 'Are you absolutely sure you want to remove the link to <strong>{name}</strong>?',
         btnYes: 'YES 👍',
         btnNo: 'NO 🛑',
@@ -131,6 +141,11 @@ const translations = {
         statusImport: 'Validando e Extraendo Datos...',
         errInvalidFile: '❌ ¡Archivo de copia de seguridad inválido o dañado!',
         backupWarning: '🚨 GUERRA AVISADA NO MATA SOLDADO: ¡Baja tu copia de seguridad! Este archivo es tu responsabilidad. No tenemos acceso a nada. Si lo pierdes y limpias el navegador... ¡ya fue, mi pana! Ni el Chapulín Colorado te salva los links.',
+        btnImportBrowser: 'Importar Favoritos 🌐',
+        importBrowserTitle: '🌐 Importar Favoritos del Navegador',
+        importBrowserHint: 'Cómo exportar:\nChrome: Menú → Marcadores → Administrador → ⋮ → Exportar\nFirefox: Menú → Marcadores → Administrar → Importar y respaldar → Exportar\nEdge: Menú → Favoritos → ⋮ → Exportar favoritos',
+        importBrowserSuccess: '✅ ¡{added} enlace(s) importado(s)! {skipped} duplicado(s) omitido(s).',
+        importBrowserEmpty: '⚠️ No se encontraron enlaces válidos en el archivo.',
         confirmDelete: '¿Estás absolutamente seguro de que deseas eliminar el enlace a <strong>{name}</strong>?',
         btnYes: 'SÍ 👍',
         btnNo: 'NO 🛑',
@@ -237,6 +252,9 @@ function applyLanguage(lang) {
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) searchInput.placeholder = t.searchPlaceholder;
+
+    const btnImportBrowser = document.getElementById('btnImportBrowser');
+    if (btnImportBrowser) btnImportBrowser.innerText = t.btnImportBrowser;
 
     // Reaplica filtro de categorias com novo idioma
     updateCategoryFilter();
@@ -744,6 +762,99 @@ document.getElementById('categoryFilter').addEventListener('change', (e) => {
     currentCategoryFilter = e.target.value;
     renderList();
 });
+
+document.getElementById('btnImportBrowser').addEventListener('click', () =>
+    document.getElementById('bookmarkImporter').click()
+);
+document.getElementById('bookmarkImporter').addEventListener('change', function() {
+    importBrowserBookmarks(this);
+});
+
+// ── Importação de favoritos do navegador (Netscape Bookmark File) ─────────────
+function parseBookmarksHtml(htmlText) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlText, 'text/html');
+    const results = [];
+
+    // Percorre as pastas (H3) e seus links (A) mantendo hierarquia
+    function walkNode(node, folderName) {
+        for (const child of node.children) {
+            const tag = child.tagName;
+
+            if (tag === 'DT') {
+                const h3 = child.querySelector(':scope > H3');
+                const a = child.querySelector(':scope > A');
+                const dl = child.querySelector(':scope > DL');
+
+                if (h3 && dl) {
+                    // É uma pasta — desce com o nome dela
+                    const name = h3.innerText.trim().toUpperCase().substring(0, 13);
+                    walkNode(dl, name || folderName);
+                } else if (a) {
+                    const url = a.getAttribute('HREF') || '';
+                    const name = a.innerText.trim();
+                    if (url.startsWith('http') && name) {
+                        results.push({ url, name, folder: folderName });
+                    }
+                }
+            } else if (tag === 'DL' || tag === 'P') {
+                walkNode(child, folderName);
+            }
+        }
+    }
+
+    const topDl = doc.querySelector('DL');
+    if (topDl) walkNode(topDl, '');
+    return results;
+}
+
+function importBrowserBookmarks(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const t = translations[currentLang];
+    alert(t.importBrowserHint);
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const parsed = parseBookmarksHtml(e.target.result);
+
+        if (parsed.length === 0) {
+            alert(t.importBrowserEmpty);
+            input.value = '';
+            return;
+        }
+
+        const existingUrls = new Set(pages.map(p => p.url.toLowerCase()));
+        let added = 0, skipped = 0;
+
+        parsed.forEach(({ url, name, folder }) => {
+            if (existingUrls.has(url.toLowerCase())) {
+                skipped++;
+                return;
+            }
+            const hostname = (() => {
+                try { return new URL(url).hostname.replace('www.', '').split('.')[0].toUpperCase(); }
+                catch { return name.substring(0, 20).toUpperCase(); }
+            })();
+            pages.push({
+                name: hostname,
+                url,
+                autoOpen: false,
+                category: folder || '',
+                description: name.substring(0, 25)
+            });
+            existingUrls.add(url.toLowerCase());
+            added++;
+        });
+
+        renderList();
+        alert(t.importBrowserSuccess.replace('{added}', added).replace('{skipped}', skipped));
+        input.value = '';
+    };
+    reader.readAsText(file);
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 function tocarSomMK() {
     var audio = new Audio('sounds/som-mk.mp3'); 

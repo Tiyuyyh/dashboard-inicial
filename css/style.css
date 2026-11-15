@@ -337,9 +337,11 @@ li:hover { background: #404042; }
 .badge-type { font-size: 16px; margin-left: auto; margin-right: 10px; }
 
 .backup-warning-text { font-size: 11px; line-height: 1.4; color: #aeaea2; text-align: center; background: #232325; padding: 10px; border-radius: 6px; margin-top: 25px; border-left: 3px solid #007aff; }
-.backup-zone { margin-top: 10px; display: flex; gap: 10px; }
-.btn-backup { flex: 1; background-color: #3a3a3c; color: #f2f2f7; font-size: 13px; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid #48484a; }
+.backup-zone { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-backup { flex: 1; min-width: 120px; background-color: #3a3a3c; color: #f2f2f7; font-size: 13px; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid #48484a; border-radius: 8px; }
 .btn-backup:hover { background-color: #48484a; }
+.btn-import-browser { border-color: #30d158; color: #30d158; }
+.btn-import-browser:hover { background-color: #1a3a22; }
 
 .footer { margin-top: 35px; font-size: 12px; color: #8e8e93; display: flex; flex-direction: column; align-items: center; gap: 15px; }
 .creator-link { color: #de5833; text-decoration: none; font-weight: bold; }
