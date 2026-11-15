@@ -41,6 +41,14 @@ const translations = {
         errInvalidFile: '❌ Arquivo de backup inválido ou corrompido!',
         backupWarning: '🚨 SEGURO MORREU DE VELHO: Baixe seu backup! Esse arquivo é de sua total responsabilidade. Nós não temos acesso a nada. Se você perder o arquivo e limpar o navegador... já era, meu consagrado! Nem o TI da Nasa recupera.',
         btnImportBrowser: 'Importar Favoritos 🌐',
+        btnGenCode: 'Gerar Código 🔑',
+        btnCopyCode: 'Copiar',
+        btnRestoreCode: 'Restaurar',
+        codePlaceholder: 'Cole seu código aqui...',
+        codeLabel: '🔑 Código de Backup',
+        codeCopied: '✅ Código copiado!',
+        codeRestoreSuccess: '✅ Dados restaurados com sucesso!',
+        codeRestoreError: '❌ Código inválido ou corrompido.',
         importBrowserTitle: '🌐 Importar Favoritos do Navegador',
         importBrowserHint: 'Como exportar:\nChrome: Menu → Favoritos → Gerenciar favoritos → ⋮ → Exportar\nFirefox: Menu → Favoritos → Gerenciar favoritos → Importar e fazer backup → Exportar\nEdge: Menu → Favoritos → ⋮ → Exportar favoritos',
         importBrowserSuccess: '✅ {added} link(s) importado(s)! {skipped} duplicata(s) ignorada(s).',
@@ -96,6 +104,14 @@ const translations = {
         errInvalidFile: '❌ Invalid or corrupted backup file!',
         backupWarning: '🚨 PROTECT YOUR GOODS: Download your backup! This file is 100% your responsibility. We don\'t have a server, we don\'t track you. If you lose this file and wipe your browser, it\'s gone to the shadow realm. No cloud, no mercy!',
         btnImportBrowser: 'Import Bookmarks 🌐',
+        btnGenCode: 'Generate Code 🔑',
+        btnCopyCode: 'Copy',
+        btnRestoreCode: 'Restore',
+        codePlaceholder: 'Paste your code here...',
+        codeLabel: '🔑 Backup Code',
+        codeCopied: '✅ Code copied!',
+        codeRestoreSuccess: '✅ Data restored successfully!',
+        codeRestoreError: '❌ Invalid or corrupted code.',
         importBrowserTitle: '🌐 Import Browser Bookmarks',
         importBrowserHint: 'How to export:\nChrome: Menu → Bookmarks → Bookmark manager → ⋮ → Export\nFirefox: Menu → Bookmarks → Manage bookmarks → Import and Backup → Export\nEdge: Menu → Favorites → ⋮ → Export favorites',
         importBrowserSuccess: '✅ {added} link(s) imported! {skipped} duplicate(s) skipped.',
@@ -151,6 +167,14 @@ const translations = {
         errInvalidFile: '❌ ¡Archivo de copia de seguridad inválido o dañado!',
         backupWarning: '🚨 GUERRA AVISADA NO MATA SOLDADO: ¡Baja tu copia de seguridad! Este archivo es tu responsabilidad. No tenemos acceso a nada. Si lo pierdes y limpias el navegador... ¡ya fue, mi pana! Ni el Chapulín Colorado te salva los links.',
         btnImportBrowser: 'Importar Favoritos 🌐',
+        btnGenCode: 'Generar Código 🔑',
+        btnCopyCode: 'Copiar',
+        btnRestoreCode: 'Restaurar',
+        codePlaceholder: 'Pega tu código aquí...',
+        codeLabel: '🔑 Código de Respaldo',
+        codeCopied: '✅ ¡Código copiado!',
+        codeRestoreSuccess: '✅ ¡Datos restaurados con éxito!',
+        codeRestoreError: '❌ Código inválido o dañado.',
         importBrowserTitle: '🌐 Importar Favoritos del Navegador',
         importBrowserHint: 'Cómo exportar:\nChrome: Menú → Marcadores → Administrador → ⋮ → Exportar\nFirefox: Menú → Marcadores → Administrar → Importar y respaldar → Exportar\nEdge: Menú → Favoritos → ⋮ → Exportar favoritos',
         importBrowserSuccess: '✅ ¡{added} enlace(s) importado(s)! {skipped} duplicado(s) omitido(s).',
@@ -265,6 +289,17 @@ function applyLanguage(lang) {
 
     const btnImportBrowser = document.getElementById('btnImportBrowser');
     if (btnImportBrowser) btnImportBrowser.innerText = t.btnImportBrowser;
+
+    const btnGenCode = document.getElementById('btnGenCode');
+    if (btnGenCode) btnGenCode.innerText = t.btnGenCode;
+    const btnCopyCode = document.getElementById('btnCopyCode');
+    if (btnCopyCode) btnCopyCode.innerText = t.btnCopyCode;
+    const btnRestoreCode = document.getElementById('btnRestoreCode');
+    if (btnRestoreCode) btnRestoreCode.innerText = t.btnRestoreCode;
+    const codeInput = document.getElementById('codeInput');
+    if (codeInput) codeInput.placeholder = t.codePlaceholder;
+    const codeLabel = document.getElementById('txtCodeLabel');
+    if (codeLabel) codeLabel.innerText = t.codeLabel;
 
     // Reaplica filtro de categorias com novo idioma
     updateCategoryFilter();
@@ -895,6 +930,58 @@ document.getElementById('btnImportBrowser').addEventListener('click', () =>
 document.getElementById('bookmarkImporter').addEventListener('change', function() {
     importBrowserBookmarks(this);
 });
+document.getElementById('btnGenCode').addEventListener('click', generateBackupCode);
+document.getElementById('btnCopyCode').addEventListener('click', copyBackupCode);
+document.getElementById('btnRestoreCode').addEventListener('click', restoreFromCode);
+
+// ── Código de backup em texto ─────────────────────────────────────────────────
+async function generateBackupCode() {
+    const packageData = { signature: "TIYU_DASH_BKP", globalAutoOpen, globalOpenMode, customTabs: pages };
+    const code = await encryptData(JSON.stringify(packageData));
+    const input = document.getElementById('codeInput');
+    input.value = code;
+    input.select();
+    input.focus();
+}
+
+async function restoreFromCode() {
+    const code = document.getElementById('codeInput').value.trim();
+    const t = translations[currentLang];
+    if (!code) return;
+
+    try {
+        const json = await decryptData(code);
+        const obj = JSON.parse(json);
+        if (obj.signature !== 'TIYU_DASH_BKP') throw new Error();
+
+        globalAutoOpen = obj.globalAutoOpen ?? false;
+        globalOpenMode = obj.globalOpenMode || 'tab';
+        pages = obj.customTabs || [];
+
+        document.getElementById('globalAutoOpen').checked = globalAutoOpen;
+        document.getElementById('globalOpenMode').value = globalOpenMode;
+        localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
+        localStorage.setItem('globalOpenMode', globalOpenMode);
+
+        renderList();
+        document.getElementById('codeInput').value = '';
+        alert(t.codeRestoreSuccess);
+    } catch {
+        alert(t.codeRestoreError);
+    }
+}
+
+function copyBackupCode() {
+    const val = document.getElementById('codeInput').value;
+    if (!val) return;
+    navigator.clipboard.writeText(val).then(() => {
+        const btn = document.getElementById('btnCopyCode');
+        const original = btn.innerText;
+        btn.innerText = translations[currentLang].codeCopied;
+        setTimeout(() => { btn.innerText = original; }, 2000);
+    });
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 // ── Importação de favoritos do navegador (Netscape Bookmark File) ─────────────
 function parseBookmarksHtml(htmlText) {

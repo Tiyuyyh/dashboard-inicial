@@ -352,6 +352,20 @@ li.drag-over { border-left-color: #30d158; background: #2a3a2e; }
 
 .backup-warning-text { font-size: 11px; line-height: 1.4; color: #aeaea2; text-align: center; background: #232325; padding: 10px; border-radius: 6px; margin-top: 25px; border-left: 3px solid #007aff; }
 .backup-zone { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Code Backup Zone */
+.code-backup-zone { margin-top: 14px; background: #232325; border: 1px solid #48484a; border-radius: 10px; padding: 12px; }
+.code-backup-header { font-size: 12px; font-weight: bold; color: #a2a2a7; margin-bottom: 8px; letter-spacing: 0.5px; }
+.code-input-area { width: 100%; box-sizing: border-box; background: #1c1c1e; color: #f2f2f7; border: 1px solid #48484a; border-radius: 7px; padding: 9px 10px; font-size: 11px; font-family: 'Courier New', monospace; resize: vertical; min-height: 60px; word-break: break-all; }
+.code-input-area:focus { outline: none; border-color: #de5833; }
+.code-input-area::placeholder { color: #636366; font-style: italic; }
+.code-backup-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.btn-gen-code { border-color: #de5833; color: #de5833; }
+.btn-gen-code:hover { background-color: #3a1a10; }
+.btn-copy-code { border-color: #007aff; color: #007aff; }
+.btn-copy-code:hover { background-color: #0a1f33; }
+.btn-restore-code { border-color: #30d158; color: #30d158; }
+.btn-restore-code:hover { background-color: #1a3a22; }
 .btn-backup { flex: 1; min-width: 120px; background-color: #3a3a3c; color: #f2f2f7; font-size: 13px; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid #48484a; border-radius: 8px; }
 .btn-backup:hover { background-color: #48484a; }
 .btn-import-browser { border-color: #30d158; color: #30d158; }
