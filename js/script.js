@@ -57,6 +57,11 @@ const translations = {
         btnYes: 'SIM 👍',
         btnNo: 'NÃO 🛑',
         termosResp: "📜 TERMO DE USO E RESPONSABILIDADE\n\n1. Todo conteúdo é de sua responsabilidade.\n2. Sem links ilegais ou maliciosos.\n3. Você isenta o desenvolvedor de responsabilidade.\n\nAceita os termos?",
+        trustFileTitle: '⚠️ Você confia neste arquivo?',
+        trustFileBody: 'O arquivo <strong>{name}</strong> será carregado e substituirá seus dados atuais. Você tem total responsabilidade sobre o conteúdo. Prosseguir?',
+        trustCodeTitle: '⚠️ Você confia neste código?',
+        trustCodeBody: 'Este código será descriptografado e substituirá seus dados atuais. Cole apenas códigos gerados por você. Prosseguir?',
+        errEmptyBackup: '❌ O arquivo não contém nenhum favorito válido. Verifique se é o arquivo correto.',
         aboutTitle: '🌐 O que é isso?',
         aboutDesc: 'Seus favoritos portáteis. Salve, carregue e abra todos os seus sites de trabalho com um único clique, em qualquer navegador ou computador.',
         guideTitle: '📌 COMO FIXAR COMO PÁGINA INICIAL NO {browser}:\n\n',
@@ -120,6 +125,11 @@ const translations = {
         btnYes: 'YES 👍',
         btnNo: 'NO 🛑',
         termosResp: "📜 TERMS OF USE AND RESPONSIBILITY\n\n1. All content is your sole responsibility.\n2. No illegal or malicious links allowed.\n3. You hold the developer harmless from any liability.\n\nDo you accept these terms?",
+        trustFileTitle: '⚠️ Do you trust this file?',
+        trustFileBody: 'The file <strong>{name}</strong> will be loaded and replace your current data. You take full responsibility for its content. Continue?',
+        trustCodeTitle: '⚠️ Do you trust this code?',
+        trustCodeBody: 'This code will be decrypted and replace your current data. Only paste codes you generated yourself. Continue?',
+        errEmptyBackup: '❌ The file contains no valid bookmarks. Make sure it is the correct file.',
         aboutTitle: '🌐 What is this?',
         aboutDesc: 'Your portable bookmarks. Save, load, and open all your work sites with a single click, on any browser or computer.',
         guideTitle: '📌 HOW TO SET AS HOMEPAGE IN {browser}:\n\n',
@@ -183,6 +193,11 @@ const translations = {
         btnYes: 'SÍ 👍',
         btnNo: 'NO 🛑',
         termosResp: "📜 TÉRMINO DE USO E RESPONSABILIDAD\n\n1. Todo el contenido es tu responsabilidad.\n2. Sin enlaces ilegales o maliciosos.\n3. Eximes al desarrollador de responsabilidad.\n\n¿Aceptas los términos?",
+        trustFileTitle: '⚠️ ¿Confías en este archivo?',
+        trustFileBody: 'El archivo <strong>{name}</strong> se cargará y reemplazará tus datos actuales. Tienes total responsabilidad sobre el contenido. ¿Continuar?',
+        trustCodeTitle: '⚠️ ¿Confías en este código?',
+        trustCodeBody: 'Este código será descifrado y reemplazará tus datos actuales. Pega solo códigos que tú mismo generaste. ¿Continuar?',
+        errEmptyBackup: '❌ El archivo no contiene ningún favorito válido. Verifica que sea el archivo correcto.',
         aboutTitle: '🌐 ¿Qué es esto?',
         aboutDesc: 'Tus marcadores portátiles. Guarda, carga y abre todos tus sitios de trabalho con un solo clic, en cualquier navegador o computadora.',
         guideTitle: '📌 CÓMO FIJAR INICIO EN {browser}:\n\n',
@@ -197,6 +212,25 @@ function sanitizeUrl(url) {
     if (trimmed.startsWith('javascript:') || trimmed.startsWith('data:') || trimmed.startsWith('vbscript:')) return '#';
     return url.trim();
 }
+
+// ── Popup de confiança customizado (substitui confirm() nativo) ───────────────
+let _trustCallback = null;
+
+function showTrustConfirm(titleHtml, bodyHtml, onConfirm) {
+    _trustCallback = onConfirm;
+    document.getElementById('txtTrustTitle').innerHTML = titleHtml;
+    document.getElementById('txtTrustBody').innerHTML = bodyHtml;
+    document.getElementById('trustConfirmAlert').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeTrustConfirm(confirmed) {
+    document.getElementById('trustConfirmAlert').style.display = 'none';
+    const cb = _trustCallback;
+    _trustCallback = null;
+    if (confirmed && cb) cb();
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 // ── Sanitização de texto simples (remove tags HTML) ───────────────────────────
 function sanitizeText(text) {
@@ -468,37 +502,48 @@ function importBackup(input) {
     const file = input.files[0];
     if (!file) return;
 
-    const termoResponsabilidade = translations[currentLang].termosResp;
-    if (!confirm(termoResponsabilidade)) {
-        input.value = '';
-        return;
-    }
+    const t = translations[currentLang];
+    const safeName = sanitizeText(file.name);
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        runBackupAnimation(translations[currentLang].statusImport, file.name, formatBytes(file.size), async () => {
-            try {
-                const decryptedJson = await decryptData(e.target.result.trim());
-                const importedObj = JSON.parse(decryptedJson);
-                if (importedObj.signature !== "TIYU_DASH_BKP") throw new Error();
+    showTrustConfirm(
+        t.trustFileTitle,
+        t.trustFileBody.replace('{name}', safeName),
+        () => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                runBackupAnimation(t.statusImport, file.name, formatBytes(file.size), async () => {
+                    try {
+                        const decryptedJson = await decryptData(e.target.result.trim());
+                        const importedObj = JSON.parse(decryptedJson);
+                        if (importedObj.signature !== "TIYU_DASH_BKP") throw new Error();
 
-                globalAutoOpen = importedObj.globalAutoOpen ?? false;
-                globalOpenMode = importedObj.globalOpenMode || 'tab';
-                pages = (importedObj.customTabs || []).map(sanitizePage);
+                        const loaded = (importedObj.customTabs || []).map(sanitizePage);
+                        if (loaded.length === 0) {
+                            alert(t.errEmptyBackup);
+                            input.value = '';
+                            return;
+                        }
 
-                document.getElementById('globalAutoOpen').checked = globalAutoOpen;
-                document.getElementById('globalOpenMode').value = globalOpenMode;
+                        globalAutoOpen = importedObj.globalAutoOpen ?? false;
+                        globalOpenMode = importedObj.globalOpenMode || 'tab';
+                        pages = loaded;
 
-                localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
-                localStorage.setItem('globalOpenMode', globalOpenMode);
-                renderList();
-            } catch (err) {
-                alert(translations[currentLang].errInvalidFile);
-            }
-            input.value = '';
-        });
-    };
-    reader.readAsText(file);
+                        document.getElementById('globalAutoOpen').checked = globalAutoOpen;
+                        document.getElementById('globalOpenMode').value = globalOpenMode;
+
+                        localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
+                        localStorage.setItem('globalOpenMode', globalOpenMode);
+                        renderList();
+                    } catch (err) {
+                        alert(t.errInvalidFile);
+                    }
+                    input.value = '';
+                });
+            };
+            reader.readAsText(file);
+        }
+    );
+    input.value = ''; // limpa imediatamente para permitir reselecionar o mesmo arquivo
 }
 
 function cleanUrlName(urlText) {
@@ -918,6 +963,8 @@ document.getElementById('btnClosePopup').addEventListener('click', () => minimiz
 document.getElementById('btnCloseStorage').addEventListener('click', () => minimizeAlert('storageAlert'));
 document.getElementById('minimizedBadge').addEventListener('click', restoreAlertas);
 document.getElementById('btnDeleteYes').addEventListener('click', () => closeDeleteConfirm(true));
+document.getElementById('btnTrustYes').addEventListener('click', () => closeTrustConfirm(true));
+document.getElementById('btnTrustNo').addEventListener('click', () => closeTrustConfirm(false));
 document.getElementById('btnDeleteNo').addEventListener('click', () => closeDeleteConfirm(false));
 document.getElementById('btnSetHomepage').addEventListener('click', showHomepageGuide);
 
@@ -978,31 +1025,36 @@ async function generateBackupCode() {
     input.focus();
 }
 
-async function restoreFromCode() {
+function restoreFromCode() {
     const code = document.getElementById('codeInput').value.trim();
     const t = translations[currentLang];
     if (!code) return;
 
-    try {
-        const json = await decryptData(code);
-        const obj = JSON.parse(json);
-        if (obj.signature !== 'TIYU_DASH_BKP') throw new Error();
+    showTrustConfirm(t.trustCodeTitle, t.trustCodeBody, async () => {
+        try {
+            const json = await decryptData(code);
+            const obj = JSON.parse(json);
+            if (obj.signature !== 'TIYU_DASH_BKP') throw new Error();
 
-        globalAutoOpen = obj.globalAutoOpen ?? false;
-        globalOpenMode = obj.globalOpenMode || 'tab';
-        pages = (obj.customTabs || []).map(sanitizePage);
+            const loaded = (obj.customTabs || []).map(sanitizePage);
+            if (loaded.length === 0) { alert(t.errEmptyBackup); return; }
 
-        document.getElementById('globalAutoOpen').checked = globalAutoOpen;
-        document.getElementById('globalOpenMode').value = globalOpenMode;
-        localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
-        localStorage.setItem('globalOpenMode', globalOpenMode);
+            globalAutoOpen = obj.globalAutoOpen ?? false;
+            globalOpenMode = obj.globalOpenMode || 'tab';
+            pages = loaded;
 
-        renderList();
-        document.getElementById('codeInput').value = '';
-        alert(t.codeRestoreSuccess);
-    } catch {
-        alert(t.codeRestoreError);
-    }
+            document.getElementById('globalAutoOpen').checked = globalAutoOpen;
+            document.getElementById('globalOpenMode').value = globalOpenMode;
+            localStorage.setItem('globalAutoOpen', JSON.stringify(globalAutoOpen));
+            localStorage.setItem('globalOpenMode', globalOpenMode);
+
+            renderList();
+            document.getElementById('codeInput').value = '';
+            alert(t.codeRestoreSuccess);
+        } catch {
+            alert(t.codeRestoreError);
+        }
+    });
 }
 
 function copyBackupCode() {

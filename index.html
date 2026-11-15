@@ -70,6 +70,16 @@
 </div>
 
 <div class="alerts-container">
+    <!-- POPUP DE CONFIANÇA (arquivo / código) -->
+    <div class="popup-alert trust-confirm-alert" id="trustConfirmAlert" style="display: none;">
+        <div id="txtTrustTitle" style="font-weight:bold; margin-bottom:8px; font-size:14px;"></div>
+        <div id="txtTrustBody" style="margin-bottom: 12px; line-height: 1.5; font-size:13px;"></div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button id="btnTrustYes" style="background-color: #30d158; color: white; padding: 6px 16px; font-size: 13px; width: auto;">SIM</button>
+            <button id="btnTrustNo" style="background-color: #48484a; color: white; padding: 6px 16px; font-size: 13px; width: auto;">NÃO</button>
+        </div>
+    </div>
+
     <div class="popup-alert delete-confirm-alert" id="deleteConfirmAlert" style="display: none;">
         <div id="txtDeleteConfirm" style="margin-bottom: 12px; line-height: 1.4;"></div>
         <div style="display: flex; gap: 10px; justify-content: flex-end;">
