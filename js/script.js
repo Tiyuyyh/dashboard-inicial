@@ -284,11 +284,14 @@ function applyLanguage(lang) {
     currentLang = lang;
     const t = translations[lang];
     
-    document.getElementById('txtTitle').innerText = t.title;
-    document.getElementById('txtSubtitle').innerText = t.subtitle;
+    // Preserva o botão ℹ️ dentro do H1 ao trocar o texto do título
+    const titleEl = document.getElementById('txtTitle');
+    const infoBtn = document.getElementById('btnAboutToggle');
+    titleEl.textContent = t.title + ' ';
+    if (infoBtn) titleEl.appendChild(infoBtn);
     document.getElementById('lblGlobal').innerText = t.lblGlobal;
-    document.getElementById('lblGlobalMode').innerText = t.lblGlobalMode;
-    document.getElementById('txtHelpGlobal').innerText = t.helpGlobal;
+    const lblMode = document.getElementById('lblGlobalMode');
+    if (lblMode) lblMode.innerText = t.lblGlobalMode;
     document.getElementById('urlInput').placeholder = t.placeholder;
     document.getElementById('btnForceOpen').innerText = t.btnForce;
     document.getElementById('txtLangNotice').innerText = t.langNotice;
@@ -296,7 +299,6 @@ function applyLanguage(lang) {
     document.getElementById('btnDownloadBkp').innerText = t.btnDownload;
     document.getElementById('btnUploadBkp').innerText = t.btnUpload;
     document.getElementById('txtBackupWarning').innerText = t.backupWarning;
-    document.getElementById('txtAboutTitle').innerText = t.aboutTitle;
     document.getElementById('txtAboutDesc').innerText = t.aboutDesc;
     document.getElementById('btnSetHomepage').innerText = t.btnSetHomepage;
 
